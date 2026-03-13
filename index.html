@@ -305,15 +305,60 @@ body{background:var(--bg);color:var(--text);font-family:'DM Sans',sans-serif;min
 
 /* ===================== RESPONSIVE ===================== */
 @media(max-width:700px){
-  .home-layout{flex-direction:column-reverse;}
-  .home-main{padding:32px 24px;min-height:unset;justify-content:flex-start;}
-  .home-hero h1{font-size:2rem;}
+  /* Layout: session start first, then modules below */
+  .home-layout{flex-direction:column;}
+  .home-main{padding:28px 20px;min-height:unset;justify-content:flex-start;}
+  .home-hero h1{font-size:1.8rem;}
+  .home-hero p{font-size:1rem;}
   .home-sidebar{width:100%;position:static;height:auto;border-left:none;border-top:1px solid var(--border);}
+  /* Enlarge fonts across the board */
+  body{font-size:1.05rem;}
+  .logo{font-size:1.2rem;}
+  .logo span{font-size:.75rem;}
+  .hstat-val{font-size:1rem;}
+  .hstat-lbl{font-size:.7rem;}
+  .session-start{font-size:1.1rem;padding:18px 32px;}
+  .session-hint{font-size:.88rem;}
+  .sidebar-hdr{font-size:.72rem;}
+  .mr-name{font-size:.92rem;}
+  .mr-meta{font-size:.78rem;}
+  .mr-btn{font-size:.72rem;padding:4px 11px;}
+  /* Session screen */
   .mc-options{grid-template-columns:1fr;}
-  .question-area{padding:32px 20px 24px;}
-  .q-text{font-size:1.15rem;}
-  .session-header{padding:12px 20px;}
-  .results-card{padding:32px 24px;}
+  .mc-opt{font-size:1.05rem;padding:16px 18px;}
+  .question-area{padding:28px 18px 24px;}
+  .q-text{font-size:1.25rem;}
+  .q-module-badge{font-size:.78rem;}
+  .q-note{font-size:.9rem;}
+  .fill-input{font-size:1.15rem;}
+  .submit-btn{font-size:1.05rem;}
+  .word-chip{font-size:1rem;padding:10px 16px;}
+  .session-header{padding:12px 16px;gap:12px;}
+  .sess-counter{font-size:.82rem;}
+  .sess-timer{font-size:.9rem;}
+  .sess-streak{font-size:.9rem;}
+  .quit-btn{font-size:.82rem;}
+  /* Feedback */
+  .feedback{padding:20px 18px;}
+  .feedback-title{font-size:1.05rem;}
+  .feedback-exp{font-size:.92rem;}
+  .continue-btn{font-size:1rem;}
+  /* Results */
+  .results-card{padding:32px 20px;}
+  .results-title{font-size:1.6rem;}
+  .results-score{font-size:2.4rem;}
+  .results-msg{font-size:.95rem;}
+  .res-stat-val{font-size:1.2rem;}
+  .res-stat-lbl{font-size:.72rem;}
+  .btn-primary,.btn-secondary{font-size:1rem;padding:14px 24px;}
+  .weak-area-item{font-size:.92rem;}
+  .wrong-item{font-size:.9rem;}
+  /* Lang toggle */
+  .lang-btn{font-size:.78rem;padding:5px 11px;}
+  /* Mascot smaller on mobile */
+  .mascot{top:60px;right:12px;width:64px;}
+  .mascot-svg{width:64px;height:64px;}
+  .mascot-name{font-size:.55rem;}
 }
 </style>
 </head>
@@ -330,14 +375,13 @@ body{background:var(--bg);color:var(--text);font-family:'DM Sans',sans-serif;min
       </div>
       <div class="hstat"><div class="hstat-val" id="home-xp">0</div><div class="hstat-lbl">XP</div></div>
       <div class="hstat"><div class="hstat-val" id="home-streak">🔥 0</div><div class="hstat-lbl">Streak</div></div>
-      <button class="refresh-btn" onclick="showRefreshInfo()">+ Adaugă pagini</button>
     </div>
   </header>
   <div class="home-layout">
     <div class="home-main">
       <div class="home-hero">
         <h1>Caietul Tău de Română</h1>
-        <p>Întrebări create din notițele tale · 14 pagini · 10 module</p>
+        <p>Întrebări create din notițele tale · 15 pagini · 11 module</p>
       </div>
       <button class="session-start" onclick="startSession()">▶ Începe sesiunea</button>
       <p class="session-hint">20 de întrebări aleatoare din toate modulele · ~90 sec fiecare</p>
@@ -458,7 +502,7 @@ body{background:var(--bg);color:var(--text);font-family:'DM Sans',sans-serif;min
 // To update with new pages run: npm run refresh
 // =====================================================================
 /* CAIET_DATA_START */
-const METADATA = { lastUpdated: "2026-03-13", pagesProcessed: 14, totalPages: 14 };
+const METADATA = { lastUpdated: "2026-03-13", pagesProcessed: 15, totalPages: 15 };
 
 const MODULES = [
 {
@@ -657,6 +701,50 @@ const MODULES = [
     { type:'fill', q:'"Periuță de ___" = toothbrush (teeth)', a:'dinți', alt:['dinti'], e:'"Periuță de dinți" = toothbrush. "Pastă de dinți" = toothpaste. "Dinți" pl. of "dinte".', page:14 },
     { type:'mc', q:'"Un pachet de biscuiți" — "pachet" = ?', opts:['A pack/packet','A bag','A box','A jar'], a:'A pack/packet', e:'"Pachet" = pack/packet. "Un pachet de cafea" = a pack of coffee.', page:14 },
     { type:'fill', q:'"Mult timp" vs "Multă ___" (water)', a:'apă', alt:['apa'], e:'"Mult timp" (neutru sg.) "Multă apă" (feminin sg.). Acordul e obligatoriu!', page:14 },
+    { type:'mc', q:'"Câțiva" se folosește cu:', opts:['Masculin plural','Feminin plural','Neutru singular','Toate'], a:'Masculin plural', e:'"Câțiva" + masc.pl. "Câteva" + fem./neutru pl. "Câțiva prieteni" / "Câteva cărți".', page:14 },
+    { type:'fill', q:'"___ prietene" (a few, feminine)', a:'Câteva', alt:['cateva','Cateva'], e:'"Câteva" + fem.pl. "Câțiva" + masc.pl. Atenție la genul substantivului!', page:14 },
+    { type:'mc', q:'"Atât" înseamnă:', opts:['So much','Very','Only','Always'], a:'So much', e:'"Atât" = so much / that much. "Atât de frumos!" = So beautiful!', page:14 },
+    { type:'mc', q:'"Chiar" poate însemna:', opts:['Even / Really','Only','Never','Always'], a:'Even / Really', e:'"Chiar" = even/really. "Chiar acum" = right now. "Chiar și tu" = even you.', page:14 },
+    { type:'fill', q:'"___" înseamnă "tip" (la restaurant)', a:'Bacșiș', alt:['bacsis','Bacsis','bacsis'], e:'"Bacșiș" = tip. "Lăsați bacșiș?" = Do you leave a tip?', page:14 },
+    { type:'mc', q:'"Liniște!" înseamnă:', opts:['Quiet! / Silence!','Listen!','Sorry!','Help!'], a:'Quiet! / Silence!', e:'"Liniște" [F] = quiet/silence. Plural: "liniști". "Stai liniștit!" = Stay calm!', page:14 },
+    { type:'mc', q:'"Lume" poate însemna:', opts:['Crowd AND world','Only world','Only crowd','People'], a:'Crowd AND world', e:'"Lume" [F] = crowd/world. "E multă lume" = there are many people. "Lumea" = the world.', page:14 },
+    { type:'fill', q:'"O ___ de hârtie" (a sheet of paper)', a:'foaie', alt:['Foaie'], e:'"Foaie" = sheet. Plural: "foi". "Foi de hârtie" = sheets of paper.', page:14 },
+    { type:'mc', q:'"Ajutor" la masculin plural devine:', opts:['Ajutori','Ajutoare','Ajutor','Ajutoruri'], a:'Ajutori', e:'"Ajutor" [M] → "ajutori". "Ajutor" [N] → "ajutoare". Gen diferit = plural diferit!', page:14 },
+    { type:'mc', q:'"Puțin" este opusul lui:', opts:['Mult','Destul','Chiar','Atât'], a:'Mult', e:'"Puțin/Puțină/Puțini/Puține" = little/few. Opusul: "Mult/Multă/Mulți/Multe".', page:14 },
+    { type:'fill', q:'"Opriți ___!" (Stop here!)', a:'aici', alt:['Aici'], e:'"Opriți aici!" = Stop here! "Păstrați restul!" = Keep the change!', page:14 },
+    { type:'mc', q:'"Timp" (time) este de genul:', opts:['Neutru (timpuri)','Masculin (timpi)','Feminin (timpuri)','Neutru (timpe)'], a:'Neutru (timpuri)', e:'"Timp" [N] → "timpuri". Neutrul = masculin la sg, feminin la pl.', page:14 },
+  ]
+},
+{
+  id: 'food', name: 'Mâncare & Restaurant', sub: 'Pagina 15',
+  icon: '🍽️', page: 15, color: '#e07a5c',
+  exercises: [
+    { type:'mc', q:'"O mură" înseamnă:', opts:['Blackberry','Blueberry','Raspberry','Strawberry'], a:'Blackberry', e:'"Mură" = blackberry. Plural: "mure". "O mură" [F].', page:15 },
+    { type:'mc', q:'"O afină" înseamnă:', opts:['Blueberry','Blackberry','Plum','Grape'], a:'Blueberry', e:'"Afină" = blueberry. Plural: "afine". Fruct mic, albastru.', page:15 },
+    { type:'mc', q:'"Lubeniță" vs "Pepene" — care este "watermelon"?', opts:['Lubeniță','Pepene','Ambele','Niciuna'], a:'Lubeniță', e:'"Lubeniță" = watermelon. "Pepene" = melon (galben). Plural: "lubenițe" / "pepeni".', page:15 },
+    { type:'fill', q:'"O ___" (peach, plural: piersici)', a:'piersică', alt:['piersica','Piersica','Piersică'], e:'"Piersică" = peach. Plural: "piersici". "Suc de piersici" = peach juice.', page:15 },
+    { type:'mc', q:'"O prună" înseamnă:', opts:['Plum','Peach','Pear','Cherry'], a:'Plum', e:'"Prună" = plum. Plural: "prune". "Magiun de prune" = plum jam (tradițional).', page:15 },
+    { type:'fill', q:'"O ___" (raspberry, plural: zmeure)', a:'zmeură', alt:['zmeura','Zmeura','Zmeură'], e:'"Zmeură" = raspberry. Plural: "zmeure". Fruct roșu, mic.', page:15 },
+    { type:'mc', q:'"Mi-e foame" înseamnă:', opts:["I'm hungry","I'm thirsty","I'm tired","I'm cold"], a:"I'm hungry", e:'"Mi-e foame" = I\'m hungry. "Mi-e" = îmi este (formă scurtă). "Foame" = hunger.', page:15 },
+    { type:'fill', q:'"Mi-e ___!" (I\'m thirsty!)', a:'sete', alt:['Sete'], e:'"Mi-e sete" = I\'m thirsty. "Sete" = thirst. "Mi-e foame" = I\'m hungry.', page:15 },
+    { type:'mc', q:'"Mulțumim pentru masă" = ?', opts:['Thank you for the meal','Enjoy your meal','The meal is ready','Good appetite'], a:'Thank you for the meal', e:'"Mulțumim" = thank you (noi). "Masă" = meal/table.', page:15 },
+    { type:'mc', q:'"Să vă fie de bine!" este:', opts:['Hope you enjoyed the meal (polite)','Enjoy your meal','Good appetite','Thank you for coming'], a:'Hope you enjoyed the meal (polite)', e:'Expresie politicoasă după masă. "Să îți fie de bine!" = forma informală.', page:15 },
+    { type:'fill', q:'Prima masă a zilei: "Micul ___"', a:'dejun', alt:['Dejun'], e:'"Micul dejun" = breakfast. "Prânzul" = lunch. "Cina" = dinner.', page:15 },
+    { type:'mc', q:'"Prânzul" vs "Cina" — care este "dinner"?', opts:['Cina','Prânzul','Ambele','Niciuna'], a:'Cina', e:'"Cina" = dinner. "Prânzul" = lunch. "O gustare" = a snack.', page:15 },
+    { type:'fill', q:'"O ___ între mese" (a snack)', a:'gustare', alt:['Gustare'], e:'"Gustare" = snack. "A gusta" = to taste/snack. "Gustări" = snacks (pl).', page:15 },
+    { type:'mc', q:'"A comanda" înseamnă:', opts:['To order','To command','To cook','To eat'], a:'To order', e:'"A comanda" = to order (la restaurant). "Ori" = or/either.', page:15 },
+    { type:'mc', q:'"Frișcă" înseamnă:', opts:['Whipped/white cream','Fresh cheese','Butter','Ice cream'], a:'Whipped/white cream', e:'"Frișcă" = whipped cream / white cream. "Cu frișcă" = with cream.', page:15 },
+    { type:'fill', q:'"___" și "Sendviș" sunt sinonime.', a:'Sandvici', alt:['sandvici'], e:'"Sandvici" <=> "Sendviș". Plural: "sandvicuri" / "sendvișuri".', page:15 },
+    { type:'mc', q:'"Pastă" vs "Paste" — care este mâncarea?', opts:['Paste (the meal)','Pastă (the meal)','Ambele','Niciuna'], a:'Paste (the meal)', e:'"Pastă" = paste/cream (produs). "Paste" = pasta (mâncare). "Paste făinoase" = pasta.', page:15 },
+    { type:'mc', q:'"Perișoare" sunt:', opts:['Meatballs','Mushrooms','Meatloaf','Sausages'], a:'Meatballs', e:'"Perișoare" = meatballs. "Ciorbă cu perișoare" = meatball soup (clasic românesc!).', page:15 },
+    { type:'fill', q:'"___ de pui" (chicken breast)', a:'Piept', alt:['piept'], e:'"Piept de pui" = chicken breast. "Pulpe de pui" = chicken legs.', page:15 },
+    { type:'mc', q:'"Prăjiți" înseamnă:', opts:['Fried','Grilled','Baked','Boiled'], a:'Fried', e:'"Prăjiți" = fried. "Cartofi prăjiți" = french fries. "La grătar" = grilled.', page:15 },
+    { type:'mc', q:'"Tăiței" înseamnă:', opts:['Noodles','Rice','Bread','Dumplings'], a:'Noodles', e:'"Tăiței" = noodles. "Supă cu tăiței" = noodle soup.', page:15 },
+    { type:'mc', q:'"Grătar" înseamnă:', opts:['Grilled / Barbecue','Fried','Baked','Steamed'], a:'Grilled / Barbecue', e:'"Grătar" = grill/barbecue. "La grătar" = grilled. "Friptură la grătar" = grilled steak.', page:15 },
+    { type:'mc', q:'"A aduce" înseamnă:', opts:['To bring','To take','To order','To cook'], a:'To bring', e:'"A aduce" = to bring. "Aduceți nota, vă rog!" = Bring the bill, please!', page:15 },
+    { type:'fill', q:'"___" [F] = life (plural: vieți)', a:'Viață', alt:['viata','Viata','viață'], e:'"Viață" [F] = life. "Vieți" = lives. "O viață frumoasă" = a beautiful life.', page:15 },
+    { type:'mc', q:'"Bijuterie" (plural "bijuterii") înseamnă:', opts:['Jewelry','Beauty','Treasure','Crystal'], a:'Jewelry', e:'"Bijuterie" [F] = jewelry/jewel. "Bijuterii" = jewelry (pl). "Magazin de bijuterii" = jewelry store.', page:15 },
+    { type:'mc', q:'Care NU este un fruct?', opts:['Perișoare','Piersică','Prună','Zmeură'], a:'Perișoare', e:'"Perișoare" = meatballs (NU fruct!). Piersică, prună, zmeură = fructe.', page:15 },
   ]
 }
 ];
@@ -724,6 +812,32 @@ const EN_RU = {
   // quantity
   'A bag':'Пакет','A box':'Коробка','A can':'Банка (жест.)','A jar':'Банка (стекл.)',
   'A pack/packet':'Пачка',
+  'So much':'Так много','Very':'Очень','Only':'Только','Always':'Всегда',
+  'Even / Really':'Даже / Действительно','Never':'Никогда',
+  'Quiet! / Silence!':'Тихо! / Тишина!','Listen!':'Слушай!','Sorry!':'Извини!','Help!':'Помогите!',
+  'Crowd AND world':'Толпа И мир','Only world':'Только мир','Only crowd':'Только толпа','People':'Люди',
+  // food & dining (page 15)
+  'Blackberry':'Ежевика','Blueberry':'Голубика','Raspberry':'Малина','Strawberry':'Клубника',
+  'Watermelon':'Арбуз','Melon':'Дыня','Peach':'Персик','Plum':'Слива',
+  'Pear':'Груша','Cherry':'Вишня','Grape':'Виноград',
+  "I'm hungry":'Я голоден',"I'm thirsty":'Я хочу пить',
+  "I'm tired":'Я устал',"I'm cold":'Мне холодно',
+  'Thank you for the meal':'Спасибо за еду',
+  'Enjoy your meal':'Приятного аппетита',
+  'The meal is ready':'Еда готова','Good appetite':'Хорошего аппетита',
+  'Hope you enjoyed the meal (polite)':'Приятного! (вежливо)',
+  'Thank you for coming':'Спасибо, что пришли',
+  'To order':'Заказать','To command':'Командовать','To cook':'Готовить','To eat':'Есть',
+  'Whipped/white cream':'Взбитые сливки','Fresh cheese':'Свежий сыр',
+  'Butter':'Масло','Ice cream':'Мороженое',
+  'Paste (the meal)':'Паста (еда)','Meatballs':'Фрикадельки',
+  'Mushrooms':'Грибы','Meatloaf':'Мясной рулет','Sausages':'Сосиски',
+  'Fried':'Жареный','Grilled':'На гриле','Baked':'Запечённый','Boiled':'Варёный','Steamed':'На пару',
+  'Noodles':'Лапша','Rice':'Рис','Bread':'Хлеб','Dumplings':'Вареники',
+  'Grilled / Barbecue':'На гриле / Барбекю',
+  'To bring':'Принести','To take':'Взять',
+  'Jewelry':'Ювелирные изделия','Beauty':'Красота','Treasure':'Сокровище','Crystal':'Кристалл',
+  'Chicken breast':'Куриная грудка','Chicken legs':'Куриные ножки',
 };
 
 // Word/phrase-level replacements for explanation text (sorted longest-first)
