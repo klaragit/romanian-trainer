@@ -42,12 +42,13 @@ body{background:var(--bg);color:var(--text);font-family:'DM Sans',sans-serif;min
 .home-hero h1{font-family:'Playfair Display',serif;font-size:2.6rem;background:linear-gradient(135deg,var(--text),var(--gold-light));-webkit-background-clip:text;-webkit-text-fill-color:transparent;margin-bottom:8px;}
 .home-hero p{color:var(--muted);font-size:.95rem;}
 .session-start{
-  background:linear-gradient(135deg,#c9a84c,#e8c97a);border:none;border-radius:16px;
-  padding:20px 40px;color:#0d0d0d;font-family:'DM Sans',sans-serif;font-weight:600;
-  font-size:1.1rem;cursor:pointer;width:100%;max-width:440px;margin-bottom:12px;
-  transition:transform .15s,box-shadow .15s;box-shadow:0 4px 24px rgba(201,168,76,.3);
+  background:linear-gradient(135deg,#4caf7d,#5cc98a);border:none;border-radius:16px;
+  padding:20px 40px;color:#fff;font-family:'DM Sans',sans-serif;font-weight:700;
+  font-size:1.25rem;cursor:pointer;width:100%;max-width:440px;margin-bottom:12px;
+  transition:transform .15s,box-shadow .15s;box-shadow:0 4px 24px rgba(76,175,125,.35);
+  letter-spacing:.03em;
 }
-.session-start:hover{transform:translateY(-2px);box-shadow:0 8px 32px rgba(201,168,76,.4);}
+.session-start:hover{transform:translateY(-2px);box-shadow:0 8px 32px rgba(76,175,125,.5);}
 .session-hint{color:var(--muted);font-size:.8rem;text-align:center;}
 
 /* right sidebar */
@@ -101,14 +102,15 @@ body{background:var(--bg);color:var(--text);font-family:'DM Sans',sans-serif;min
 /* MC options */
 .mc-options{display:grid;grid-template-columns:1fr 1fr;gap:12px;width:100%;max-width:560px;}
 .mc-opt.selected{border-color:var(--gold);background:rgba(201,168,76,.1);}
-.mc-opt.correct{border-color:var(--green)!important;background:rgba(76,175,125,.15)!important;color:var(--green);}
-.mc-opt.wrong{border-color:var(--red)!important;background:rgba(224,92,92,.15)!important;color:var(--red);}
+.mc-opt.correct{border-color:var(--green)!important;background:rgba(76,175,125,.25)!important;color:var(--green)!important;box-shadow:0 0 16px rgba(76,175,125,.35),inset 0 0 20px rgba(76,175,125,.08)!important;font-weight:700;transform:scale(1.02);}
+.mc-opt.wrong{border-color:var(--red)!important;background:rgba(224,92,92,.2)!important;color:var(--red)!important;opacity:.7;}
+.mc-opt.correct::after{content:'✓';position:absolute;right:12px;top:50%;transform:translateY(-50%);font-size:1.3rem;font-weight:900;color:var(--green);}
 .mc-opt:disabled{cursor:default;}
 
 /* Fill blank */
 .fill-wrap{width:100%;max-width:480px;display:flex;flex-direction:column;gap:12px;}
-.fill-input.correct{border-color:var(--green);color:var(--green);}
-.fill-input.wrong{border-color:var(--red);color:var(--red);}
+.fill-input.correct{border-color:var(--green);color:var(--green);box-shadow:0 0 16px rgba(76,175,125,.3);font-weight:700;}
+.fill-input.wrong{border-color:var(--red);color:var(--red);opacity:.7;}
 .submit-btn{
   padding:14px;border-radius:12px;background:var(--gold);border:none;
   color:#0d0d0d;font-family:'DM Sans',sans-serif;font-weight:600;font-size:1rem;
@@ -297,6 +299,22 @@ body{background:var(--bg);color:var(--text);font-family:'DM Sans',sans-serif;min
 @keyframes glowPulse{0%,100%{box-shadow:0 0 0 rgba(201,168,76,0)}50%{box-shadow:0 0 30px rgba(201,168,76,.08)}}
 .question-area{animation:glowPulse 4s ease-in-out infinite;}
 
+/* Translation hint button */
+.q-translate-wrap{position:relative;display:inline-block;margin-top:8px;margin-bottom:4px;}
+.q-translate-btn{background:none;border:1px solid var(--border);color:var(--muted);
+  font-size:.85rem;padding:4px 12px;border-radius:99px;cursor:pointer;
+  font-family:'DM Sans',sans-serif;transition:all .18s;display:inline-flex;align-items:center;gap:5px;}
+.q-translate-btn:hover{border-color:var(--module-color, var(--gold));color:var(--text);}
+.q-translate-btn.active{border-color:var(--module-color, var(--gold));color:var(--text);background:rgba(255,255,255,.04);}
+.q-translation{
+  margin-top:8px;padding:10px 16px;border-radius:10px;
+  background:rgba(255,255,255,.04);border:1px solid var(--border);
+  font-size:.92rem;color:var(--muted);line-height:1.5;text-align:center;
+  animation:fadeIn .25s ease;display:none;
+}
+.q-translation.visible{display:block;}
+@keyframes fadeIn{from{opacity:0;transform:translateY(-4px)}to{opacity:1;transform:translateY(0)}}
+
 /* Language toggle */
 .lang-toggle{display:flex;background:var(--surface);border:1px solid var(--border);border-radius:99px;overflow:hidden;}
 .lang-btn{padding:4px 10px;border:none;background:none;color:var(--muted);font-size:.72rem;cursor:pointer;font-family:'DM Sans',sans-serif;transition:all .15s;line-height:1.4;}
@@ -383,7 +401,7 @@ body{background:var(--bg);color:var(--text);font-family:'DM Sans',sans-serif;min
         <h1>Caietul Tău de Română</h1>
         <p>Întrebări create din notițele tale · 15 pagini · 11 module</p>
       </div>
-      <button class="session-start" onclick="startSession()">▶ Începe sesiunea</button>
+      <button class="session-start" onclick="startSession()">▶ Start</button>
       <p class="session-hint">20 de întrebări aleatoare din toate modulele · ~90 sec fiecare</p>
     </div>
     <div class="home-sidebar">
@@ -1023,6 +1041,12 @@ function renderQuestion() {
   document.documentElement.style.setProperty('--module-color', mColor);
   let html = `<div class="q-module-badge">${mod ? mod.icon + ' ' + mod.name : ''}</div>`;
   html += `<div class="q-text">${q.q}</div>`;
+  // Translation hint button
+  const langLabel = getLang() === 'ru' ? 'RU' : 'EN';
+  html += `<div class="q-translate-wrap">
+    <button class="q-translate-btn" onclick="toggleQTranslation(this)" title="Translate question">🌐 ${langLabel}</button>
+    <div class="q-translation" id="q-translation"></div>
+  </div>`;
   if (q.note) html += `<div class="q-note">${q.note}</div>`;
 
   if (q.type === 'mc') {
@@ -1053,6 +1077,98 @@ function renderQuestion() {
   area.innerHTML = html;
   hideFeedback();
   if (q.type === 'fill') { setTimeout(() => document.getElementById('fill-inp')?.focus(), 100); }
+}
+
+// Question translation dictionary (Romanian → EN/RU)
+const Q_TRANSLATIONS_EN = {
+  // greetings
+  'Care propoziție de prezentare este GREȘITĂ?':'Which introduction sentence is WRONG?',
+  'Completați: "Îmi ___ bine să te cunosc!"':'Complete: "Îmi ___ bine să te cunosc!"',
+  'Prietena ta spune "Ciao!" Tu răspunzi informal:':'Your friend says "Ciao!" You reply informally:',
+  '"Pe tine cum te cheamă?" este echivalentul lui:':'"Pe tine cum te cheamă?" is equivalent to:',
+  'Cum spunem "I cannot wait!" în română?':'How do we say "I cannot wait!" in Romanian?',
+  'Răspuns politicos la "Îmi pare bine":':'Polite response to "Îmi pare bine":',
+  'Cum spunem "Do not worry!" la plural/formal?':'How to say "Do not worry!" in plural/formal?',
+  '"Colegi de cameră" sunt:':'"Colegi de cameră" are:',
+  'Despărțire caldă, informală:':'Warm, informal goodbye:',
+  '"Servus" este folosit în România ca:':'"Servus" is used in Romania as:',
+  'Care variantă este CORECTĂ pentru "I\'m happy to meet you"?':'Which is CORRECT for "I\'m happy to meet you"?',
+  '"Fericit" înseamnă în engleză:':'"Fericit" means in English:',
+  // a_fi
+  'Completați: "Noi ___ studenți la Universitate."':'Complete: "Noi ___ studenți la Universitate."',
+  'Negativ: "Ea nu ___ profesoară, este medic."':'Negative: "Ea nu ___ profesoară, este medic."',
+  'Care propoziție este GREȘITĂ?':'Which sentence is WRONG?',
+  '"Ei ___ colegi de cameră." — forma corectă:':'"Ei ___ colegi de cameră." — correct form:',
+  '"Dumneavoastră ___ profesor?" (politețe)':'"Dumneavoastră ___ profesor?" (polite)',
+  'Forma scurtă negativă a lui "Eu nu sunt" este:':'The short negative form of "Eu nu sunt" is:',
+  '"El nu-i acasă" este echivalentul lui:':'"El nu-i acasă" is equivalent to:',
+  '"Tu ___ obosit sau ai energie?"':'"Tu ___ tired or have energy?"',
+  'Care este forma FORMALĂ pentru "you are"?':'What is the FORMAL form for "you are"?',
+  '"Ele nu sunt" înseamnă:':'"Ele nu sunt" means:',
+  '"Sunt" apare la persoanele:':'"Sunt" appears for persons:',
+  // Common patterns
+  'Care plural este NEREGULAT?':'Which plural is IRREGULAR?',
+  'Care substantiv NU are plural?':'Which noun has NO plural?',
+};
+const Q_TRANSLATIONS_RU = {
+  'Care propoziție de prezentare este GREȘITĂ?':'Какое предложение-знакомство НЕПРАВИЛЬНОЕ?',
+  'Completați: "Îmi ___ bine să te cunosc!"':'Дополните: "Îmi ___ bine să te cunosc!"',
+  'Prietena ta spune "Ciao!" Tu răspunzi informal:':'Подруга говорит "Ciao!" Ты отвечаешь неформально:',
+  '"Pe tine cum te cheamă?" este echivalentul lui:':'"Pe tine cum te cheamă?" эквивалентно:',
+  'Cum spunem "I cannot wait!" în română?':'Как сказать "I cannot wait!" по-румынски?',
+  'Răspuns politicos la "Îmi pare bine":':'Вежливый ответ на "Îmi pare bine":',
+  'Cum spunem "Do not worry!" la plural/formal?':'Как сказать "Не волнуйтесь!" (мн.ч./формально)?',
+  '"Colegi de cameră" sunt:':'"Colegi de cameră" — это:',
+  'Despărțire caldă, informală:':'Тёплое, неформальное прощание:',
+  '"Servus" este folosit în România ca:':'"Servus" используется в Румынии как:',
+  'Care variantă este CORECTĂ pentru "I\'m happy to meet you"?':'Какой вариант ПРАВИЛЬНЫЙ для "Рад познакомиться"?',
+  '"Fericit" înseamnă în engleză:':'"Fericit" означает:',
+  'Completați: "Noi ___ studenți la Universitate."':'Дополните: "Noi ___ studenți la Universitate."',
+  'Negativ: "Ea nu ___ profesoară, este medic."':'Отрицание: "Ea nu ___ profesoară, este medic."',
+  'Care propoziție este GREȘITĂ?':'Какое предложение НЕПРАВИЛЬНОЕ?',
+  '"Ei ___ colegi de cameră." — forma corectă:':'"Ei ___ colegi de cameră." — правильная форма:',
+  '"Dumneavoastră ___ profesor?" (politețe)':'"Dumneavoastră ___ profesor?" (вежливо)',
+  'Forma scurtă negativă a lui "Eu nu sunt" este:':'Краткая отрицательная форма "Eu nu sunt":',
+  '"El nu-i acasă" este echivalentul lui:':'"El nu-i acasă" эквивалентно:',
+  '"Tu ___ obosit sau ai energie?"':'"Tu ___ устал или есть энергия?"',
+  'Care este forma FORMALĂ pentru "you are"?':'Какая ФОРМАЛЬНАЯ форма для "you are"?',
+  '"Ele nu sunt" înseamnă:':'"Ele nu sunt" означает:',
+  '"Sunt" apare la persoanele:':'"Sunt" встречается у лиц:',
+  'Care plural este NEREGULAT?':'Какое множественное число НЕПРАВИЛЬНОЕ?',
+  'Care substantiv NU are plural?':'Какое существительное НЕ имеет мн.ч.?',
+};
+
+function translateQuestion(qText) {
+  const lang = getLang();
+  const dict = lang === 'ru' ? Q_TRANSLATIONS_RU : Q_TRANSLATIONS_EN;
+  // Try exact match first
+  if (dict[qText]) return dict[qText];
+  // Fallback: use _trReplace for RU, or build a basic EN translation
+  if (lang === 'ru') return _trReplace(qText);
+  // For EN: translate common Romanian question patterns
+  let t = qText;
+  t = t.replace(/Care /g,'Which ').replace(/Completați/g,'Complete')
+    .replace(/Cum spunem/g,'How do we say').replace(/înseamnă/g,'means')
+    .replace(/Pluralul lui/g,'Plural of').replace(/forma corectă/g,'correct form')
+    .replace(/este echivalentul lui/g,'is equivalent to')
+    .replace(/ vs /g,' vs ').replace(/care este/gi,'which is')
+    .replace(/este GREȘIT/g,'is WRONG').replace(/este CORECT/g,'is CORRECT');
+  return t;
+}
+
+function toggleQTranslation(btn) {
+  const el = document.getElementById('q-translation');
+  if (!el) return;
+  const isVisible = el.classList.contains('visible');
+  if (isVisible) {
+    el.classList.remove('visible');
+    btn.classList.remove('active');
+  } else {
+    const q = sess.questions[sess.idx];
+    el.textContent = translateQuestion(q.q);
+    el.classList.add('visible');
+    btn.classList.add('active');
+  }
 }
 
 function shuffleArr(arr) {
