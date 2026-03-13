@@ -1,0 +1,1321 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Română B1 – Caiet Trainer</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700;900&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
+<style>
+:root {
+  --bg: #0d0d0d; --surface: #161616; --card: #1e1e1e; --border: #2a2a2a;
+  --gold: #c9a84c; --gold-light: #e8c97a; --text: #f0ebe0; --muted: #888;
+  --green: #4caf7d; --red: #e05c5c; --blue: #5c9ae0; --radius: 14px;
+}
+*{box-sizing:border-box;margin:0;padding:0;}
+body{background:var(--bg);color:var(--text);font-family:'DM Sans',sans-serif;min-height:100vh;line-height:1.6;overflow-x:hidden;}
+
+/* SCREENS — keep all screens hidden; only .active variants set display */
+.screen{display:none;}
+#screen-home.active{display:flex;flex-direction:column;min-height:100vh;}
+/* ===================== HOME SCREEN ===================== */
+#screen-home header{
+  padding:20px 32px;display:flex;align-items:center;justify-content:space-between;
+  border-bottom:1px solid var(--border);position:sticky;top:0;
+  background:rgba(13,13,13,0.95);backdrop-filter:blur(12px);z-index:50;
+}
+.logo{font-family:'Playfair Display',serif;font-size:1.4rem;color:var(--gold);}
+.logo span{color:var(--muted);font-family:'DM Sans',sans-serif;font-size:.8rem;font-weight:300;margin-left:8px;}
+.header-right{display:flex;gap:20px;align-items:center;}
+.hstat{text-align:center;}
+.hstat-val{font-size:1.1rem;font-weight:600;color:var(--gold);}
+.hstat-lbl{font-size:.65rem;text-transform:uppercase;letter-spacing:.1em;color:var(--muted);}
+.refresh-btn{padding:6px 16px;border:1px solid var(--border);border-radius:99px;background:none;color:var(--muted);font-size:.75rem;cursor:pointer;font-family:'DM Sans',sans-serif;transition:all .2s;}
+.refresh-btn:hover{border-color:var(--gold);color:var(--gold);}
+
+/* two-column layout */
+.home-layout{display:flex;flex:1;}
+.home-main{
+  flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;
+  padding:60px 48px;min-height:calc(100vh - 61px);
+}
+.home-hero{text-align:center;margin-bottom:40px;}
+.home-hero h1{font-family:'Playfair Display',serif;font-size:2.6rem;background:linear-gradient(135deg,var(--text),var(--gold-light));-webkit-background-clip:text;-webkit-text-fill-color:transparent;margin-bottom:8px;}
+.home-hero p{color:var(--muted);font-size:.95rem;}
+.session-start{
+  background:linear-gradient(135deg,#c9a84c,#e8c97a);border:none;border-radius:16px;
+  padding:20px 40px;color:#0d0d0d;font-family:'DM Sans',sans-serif;font-weight:600;
+  font-size:1.1rem;cursor:pointer;width:100%;max-width:440px;margin-bottom:12px;
+  transition:transform .15s,box-shadow .15s;box-shadow:0 4px 24px rgba(201,168,76,.3);
+}
+.session-start:hover{transform:translateY(-2px);box-shadow:0 8px 32px rgba(201,168,76,.4);}
+.session-hint{color:var(--muted);font-size:.8rem;text-align:center;}
+
+/* right sidebar */
+.home-sidebar{
+  width:260px;min-width:220px;flex-shrink:0;
+  background:var(--surface);border-left:1px solid var(--border);
+  position:sticky;top:61px;height:calc(100vh - 61px);overflow-y:auto;
+}
+.sidebar-hdr{
+  font-size:.65rem;text-transform:uppercase;letter-spacing:.12em;color:var(--muted);
+  padding:16px 20px 12px;border-bottom:1px solid var(--border);
+}
+.module-row{
+  display:flex;align-items:center;gap:10px;padding:11px 20px;
+  cursor:default;border-bottom:1px solid rgba(255,255,255,.03);
+  transition:background .15s;
+}
+.module-row:hover{background:rgba(201,168,76,.05);}
+.mr-icon{font-size:.95rem;flex-shrink:0;width:18px;text-align:center;}
+.mr-info{flex:1;min-width:0;}
+.mr-name{font-size:.82rem;font-weight:500;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;color:var(--text);}
+.mr-meta{font-size:.68rem;color:var(--muted);margin-top:1px;}
+.mr-bar{height:2px;background:var(--border);border-radius:99px;margin-top:5px;overflow:hidden;}
+.mr-bar-fill{height:100%;background:linear-gradient(90deg,var(--gold),var(--gold-light));border-radius:99px;transition:width .5s;}
+.mr-btn{
+  background:none;border:1px solid var(--border);color:var(--muted);
+  font-size:.65rem;padding:3px 9px;border-radius:99px;cursor:pointer;
+  font-family:'DM Sans',sans-serif;flex-shrink:0;transition:all .15s;white-space:nowrap;
+}
+.mr-btn:hover{border-color:var(--gold);color:var(--gold);}
+
+/* ===================== SESSION SCREEN ===================== */
+#screen-session.active{display:flex;flex-direction:column;min-height:100vh;}
+.session-header{
+  padding:16px 32px;background:rgba(13,13,13,0.95);backdrop-filter:blur(12px);
+  border-bottom:1px solid var(--border);position:sticky;top:0;z-index:50;
+  display:flex;align-items:center;gap:20px;
+}
+.sess-progress{flex:1;display:flex;flex-direction:column;gap:6px;}
+.sess-progress-bar{height:6px;background:var(--border);border-radius:99px;overflow:hidden;}
+.sess-counter{font-size:.78rem;color:var(--muted);}
+.sess-lives{font-size:1.1rem;letter-spacing:2px;}
+.sess-streak{font-size:.85rem;color:var(--gold);font-weight:600;min-width:50px;text-align:center;}
+.sess-timer{font-size:.85rem;color:var(--muted);min-width:50px;text-align:right;}
+.quit-btn{background:none;border:none;color:var(--muted);font-size:.8rem;cursor:pointer;padding:4px 12px;border-radius:99px;border:1px solid var(--border);font-family:'DM Sans',sans-serif;}
+.quit-btn:hover{color:var(--red);border-color:var(--red);}
+
+.question-area{flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:32px 32px 100px;max-width:720px;margin:0 auto;width:100%;}
+.q-note{font-size:.82rem;color:var(--muted);text-align:center;margin-bottom:36px;}
+
+/* MC options */
+.mc-options{display:grid;grid-template-columns:1fr 1fr;gap:12px;width:100%;max-width:560px;}
+.mc-opt.selected{border-color:var(--gold);background:rgba(201,168,76,.1);}
+.mc-opt.correct{border-color:var(--green)!important;background:rgba(76,175,125,.15)!important;color:var(--green);}
+.mc-opt.wrong{border-color:var(--red)!important;background:rgba(224,92,92,.15)!important;color:var(--red);}
+.mc-opt:disabled{cursor:default;}
+
+/* Fill blank */
+.fill-wrap{width:100%;max-width:480px;display:flex;flex-direction:column;gap:12px;}
+.fill-input.correct{border-color:var(--green);color:var(--green);}
+.fill-input.wrong{border-color:var(--red);color:var(--red);}
+.submit-btn{
+  padding:14px;border-radius:12px;background:var(--gold);border:none;
+  color:#0d0d0d;font-family:'DM Sans',sans-serif;font-weight:600;font-size:1rem;
+  cursor:pointer;transition:all .18s;
+}
+.submit-btn:hover{background:var(--gold-light);}
+.submit-btn:disabled{opacity:.4;cursor:default;}
+
+/* Word order */
+.word-order-area{width:100%;max-width:560px;}
+.word-slots{
+  min-height:56px;border:2px dashed var(--border);border-radius:12px;
+  padding:12px;display:flex;flex-wrap:wrap;gap:8px;margin-bottom:12px;
+  align-items:center;transition:border-color .18s;
+}
+.word-slots.has-words{border-style:solid;border-color:var(--gold);}
+.word-bank{display:flex;flex-wrap:wrap;gap:8px;margin-bottom:16px;}
+.word-chip{
+  padding:8px 16px;border-radius:99px;border:1px solid var(--border);background:var(--card);
+  color:var(--text);cursor:pointer;font-size:.9rem;transition:all .15s;user-select:none;
+}
+.word-chip:hover{border-color:var(--gold);background:rgba(201,168,76,.07);}
+.word-chip.placed{opacity:.35;pointer-events:none;}
+.word-chip.in-slot{border-color:var(--gold);background:rgba(201,168,76,.1);}
+
+/* Feedback overlay */
+.feedback{
+  position:fixed;bottom:0;left:0;right:0;padding:24px 32px;z-index:200;
+  display:none;align-items:center;gap:16px;
+  border-top:1px solid var(--border);backdrop-filter:blur(12px);
+  animation:slideUp .25s ease;
+}
+.feedback.correct{background:rgba(76,175,125,.15);}
+.feedback.wrong{background:rgba(224,92,92,.1);}
+.feedback.active{display:flex;}
+@keyframes slideUp{from{transform:translateY(20px);opacity:0;}to{transform:translateY(0);opacity:1;}}
+.feedback-icon{font-size:2rem;}
+.feedback-body{flex:1;}
+.feedback-title{font-weight:600;font-size:1rem;margin-bottom:2px;}
+.feedback-title.correct{color:var(--green);}
+.feedback-title.wrong{color:var(--red);}
+.feedback-exp{font-size:.83rem;color:var(--muted);}
+.continue-btn{
+  padding:12px 28px;border-radius:12px;border:none;font-family:'DM Sans',sans-serif;
+  font-weight:600;font-size:.9rem;cursor:pointer;transition:all .15s;
+}
+.feedback.correct .continue-btn{background:var(--green);color:#fff;}
+.feedback.wrong .continue-btn{background:var(--red);color:#fff;}
+
+/* Question shake animation */
+@keyframes shake{0%,100%{transform:translateX(0);}25%{transform:translateX(-8px);}75%{transform:translateX(8px);}}
+.shake{animation:shake .35s ease;}
+
+/* Confetti */
+.confetti-particle{position:fixed;pointer-events:none;z-index:999;border-radius:50%;animation:confettiFall 1.2s ease-out forwards;}
+@keyframes confettiFall{0%{opacity:1;transform:translateY(-20px) rotate(0deg);}100%{opacity:0;transform:translateY(400px) rotate(720deg);}}
+
+/* ===================== RESULTS SCREEN ===================== */
+#screen-results.active{display:flex;align-items:center;justify-content:center;min-height:100vh;padding:40px 32px;}
+.results-card{
+  background:var(--card);border:1px solid var(--border);border-radius:20px;
+  padding:48px 40px;max-width:560px;width:100%;text-align:center;
+}
+.results-emoji{font-size:4rem;margin-bottom:16px;}
+.results-title{font-family:'Playfair Display',serif;font-size:2rem;color:var(--gold);margin-bottom:8px;}
+.results-score{font-size:3rem;font-weight:700;margin:20px 0 8px;color:var(--text);}
+.results-score span{font-size:1.5rem;color:var(--muted);}
+.results-stats{display:flex;justify-content:center;gap:32px;margin:24px 0;padding:20px;background:var(--surface);border-radius:12px;}
+.res-stat{text-align:center;}
+.res-stat-val{font-size:1.4rem;font-weight:700;color:var(--gold);}
+.res-stat-lbl{font-size:.7rem;color:var(--muted);text-transform:uppercase;letter-spacing:.08em;}
+.results-msg{color:var(--muted);font-size:.9rem;margin-bottom:32px;line-height:1.6;}
+.results-btns{display:flex;gap:12px;justify-content:center;flex-wrap:wrap;}
+.btn-primary{
+  padding:14px 32px;border-radius:12px;background:var(--gold);border:none;
+  color:#0d0d0d;font-family:'DM Sans',sans-serif;font-weight:600;font-size:.95rem;cursor:pointer;
+}
+.btn-primary:hover{background:var(--gold-light);}
+.btn-secondary{
+  padding:14px 32px;border-radius:12px;background:none;border:1px solid var(--border);
+  color:var(--text);font-family:'DM Sans',sans-serif;font-weight:500;font-size:.95rem;cursor:pointer;
+}
+.btn-secondary:hover{border-color:var(--gold);color:var(--gold);}
+.weak-areas{margin-top:28px;text-align:left;}
+.weak-areas h3{font-size:.8rem;text-transform:uppercase;letter-spacing:.1em;color:var(--muted);margin-bottom:12px;}
+.weak-area-item{display:flex;align-items:center;gap:8px;padding:8px 0;border-bottom:1px solid var(--border);font-size:.85rem;}
+.weak-area-item:last-child{border-bottom:none;}
+.weak-dot{width:8px;height:8px;border-radius:50%;background:var(--red);flex-shrink:0;}
+
+/* ===================== MASCOT ===================== */
+.mascot{
+  position:fixed;top:80px;right:28px;width:88px;z-index:190;
+  display:none;flex-direction:column;align-items:center;gap:3px;
+  filter:drop-shadow(0 4px 12px rgba(0,0,0,.4));
+}
+.mascot.visible{display:flex;}
+.mascot-svg{width:88px;height:88px;}
+.mascot-name{font-size:.62rem;color:var(--gold);font-weight:600;letter-spacing:.06em;opacity:.7;}
+.mascot-bubble{
+  position:absolute;top:100%;right:0;margin-top:6px;
+  background:var(--card);border:1px solid var(--border);border-radius:10px;
+  padding:5px 10px;font-size:.72rem;color:var(--text);white-space:nowrap;
+  opacity:0;transition:opacity .3s;pointer-events:none;
+}
+.mascot-bubble.show{opacity:1;}
+
+/* idle float */
+@keyframes mascotFloat{0%,100%{transform:translateY(0)}50%{transform:translateY(-7px)}}
+/* happy jump */
+@keyframes mascotJump{0%{transform:translateY(0) scale(1)}25%{transform:translateY(-22px) scale(1.12)}55%{transform:translateY(-12px) scale(1.06)}75%{transform:translateY(-18px) scale(1.09)}100%{transform:translateY(0) scale(1)}}
+/* sad droop */
+@keyframes mascotDroop{0%{transform:translateY(0) rotate(0)}40%{transform:translateY(6px) rotate(-4deg)}100%{transform:translateY(4px) rotate(-2deg)}}
+/* wing flap for happy */
+@keyframes wingFlap{0%,100%{transform:scaleY(1)}50%{transform:scaleY(1.4) translateY(-4px)}}
+/* sound btn */
+.sound-btn{background:none;border:1px solid var(--border);color:var(--muted);font-size:.75rem;padding:3px 10px;border-radius:99px;cursor:pointer;font-family:'DM Sans',sans-serif;transition:all .15s;}
+.sound-btn:hover{border-color:var(--gold);color:var(--gold);}
+
+/* ===================== COLORFUL UI ===================== */
+.q-module-badge{
+  font-size:.72rem;text-transform:uppercase;letter-spacing:.12em;color:var(--text);
+  margin-bottom:16px;padding:5px 14px;border-radius:99px;
+  background:var(--module-color, var(--gold));
+  color:#0d0d0d;font-weight:600;box-shadow:0 2px 8px rgba(0,0,0,.2);
+}
+.q-text{font-size:1.4rem;font-weight:600;text-align:center;margin-bottom:8px;line-height:1.4;
+  background:linear-gradient(135deg,var(--text),var(--module-color, var(--gold-light)));
+  -webkit-background-clip:text;-webkit-text-fill-color:transparent;
+}
+.mc-opt{
+  padding:16px 20px;border-radius:14px;border:2px solid var(--border);
+  background:linear-gradient(145deg,var(--card),rgba(30,30,30,.9));
+  color:var(--text);font-family:'DM Sans',sans-serif;font-size:.95rem;
+  cursor:pointer;transition:all .2s;text-align:center;line-height:1.3;
+  position:relative;overflow:hidden;
+}
+.mc-opt::before{
+  content:'';position:absolute;inset:0;border-radius:12px;
+  background:linear-gradient(135deg,var(--module-color, var(--gold)),transparent);
+  opacity:0;transition:opacity .2s;
+}
+.mc-opt:hover:not(:disabled){
+  border-color:var(--module-color, var(--gold));
+  transform:translateY(-2px);
+  box-shadow:0 4px 16px rgba(0,0,0,.3);
+}
+.mc-opt:hover:not(:disabled)::before{opacity:.08;}
+.fill-input{
+  width:100%;padding:16px 20px;border-radius:14px;border:2px solid var(--border);
+  background:linear-gradient(145deg,var(--card),rgba(30,30,30,.9));
+  color:var(--text);font-family:'DM Sans',sans-serif;font-size:1.1rem;
+  text-align:center;outline:none;transition:all .2s;
+}
+.fill-input:focus{border-color:var(--module-color, var(--gold));box-shadow:0 0 20px rgba(201,168,76,.15);}
+.sess-progress-fill{
+  height:100%;border-radius:99px;transition:width .4s ease;
+  background:linear-gradient(90deg,var(--module-color, var(--gold)),var(--gold-light));
+}
+
+/* Auto-advance timer bar */
+.feedback-timer{
+  position:absolute;bottom:0;left:0;height:3px;border-radius:0 0 0 0;
+  background:rgba(255,255,255,.3);animation:timerShrink 3s linear forwards;
+}
+@keyframes timerShrink{from{width:100%}to{width:0%}}
+
+/* Page reference on wrong */
+.page-ref{font-size:.82em;color:rgba(255,255,255,.55);font-style:italic;margin-left:6px;}
+
+/* Booster & wrong answers summary */
+.booster-section{margin-top:20px;padding:16px 20px;background:rgba(92,154,224,.08);border-radius:14px;border:1px solid rgba(92,154,224,.2);text-align:center;}
+.booster-title{font-weight:700;font-size:1.05em;color:var(--blue);margin-bottom:6px;}
+.booster-detail{font-size:.85em;color:var(--muted);margin-bottom:12px;line-height:1.5;}
+.btn-booster{background:linear-gradient(135deg,#5c9ae0,#3d7fc9);color:white;border:none;padding:10px 22px;border-radius:10px;cursor:pointer;font-weight:600;font-size:.92em;font-family:'DM Sans',sans-serif;transition:all .15s;}
+.btn-booster:hover{transform:translateY(-1px);box-shadow:0 4px 12px rgba(92,154,224,.4);}
+.mistake-type-info{font-size:.78em;color:var(--muted);margin-top:2px;}
+.wrong-summary{margin-top:20px;text-align:left;max-height:300px;overflow-y:auto;}
+.wrong-summary h3{font-size:.8rem;text-transform:uppercase;letter-spacing:.1em;color:var(--muted);margin-bottom:10px;}
+.wrong-item{padding:10px 12px;margin-bottom:8px;background:rgba(224,92,92,.06);border-radius:10px;border-left:3px solid var(--red);font-size:.82rem;line-height:1.5;}
+.wrong-item .wrong-q{color:var(--text);font-weight:500;margin-bottom:3px;}
+.wrong-item .wrong-ans{color:var(--red);font-size:.78rem;}
+.wrong-item .wrong-correct{color:var(--green);font-size:.78rem;}
+.wrong-item .wrong-page{color:var(--muted);font-size:.72rem;font-style:italic;}
+
+/* Glow pulse on question area */
+@keyframes glowPulse{0%,100%{box-shadow:0 0 0 rgba(201,168,76,0)}50%{box-shadow:0 0 30px rgba(201,168,76,.08)}}
+.question-area{animation:glowPulse 4s ease-in-out infinite;}
+
+/* ===================== RESPONSIVE ===================== */
+@media(max-width:700px){
+  .home-layout{flex-direction:column-reverse;}
+  .home-main{padding:32px 24px;min-height:unset;justify-content:flex-start;}
+  .home-hero h1{font-size:2rem;}
+  .home-sidebar{width:100%;position:static;height:auto;border-left:none;border-top:1px solid var(--border);}
+  .mc-options{grid-template-columns:1fr;}
+  .question-area{padding:32px 20px 24px;}
+  .q-text{font-size:1.15rem;}
+  .session-header{padding:12px 20px;}
+  .results-card{padding:32px 24px;}
+}
+</style>
+</head>
+<body>
+
+<!-- ===================== HOME SCREEN ===================== -->
+<div id="screen-home" class="screen active">
+  <header>
+    <div class="logo">Română B1 <span>Caiet Trainer</span></div>
+    <div class="header-right">
+      <div class="hstat"><div class="hstat-val" id="home-xp">0</div><div class="hstat-lbl">XP</div></div>
+      <div class="hstat"><div class="hstat-val" id="home-streak">🔥 0</div><div class="hstat-lbl">Streak</div></div>
+      <button class="refresh-btn" onclick="showRefreshInfo()">+ Add Pages</button>
+    </div>
+  </header>
+  <div class="home-layout">
+    <div class="home-main">
+      <div class="home-hero">
+        <h1>Caietul Tău de Română</h1>
+        <p>Întrebări create din notițele tale · 14 pagini · 10 module</p>
+      </div>
+      <button class="session-start" onclick="startSession()">▶ Începe sesiunea</button>
+      <p class="session-hint">20 de întrebări aleatoare din toate modulele · ~90 sec fiecare</p>
+    </div>
+    <div class="home-sidebar">
+      <div class="sidebar-hdr">Modules</div>
+      <div id="modules-list"></div>
+    </div>
+  </div>
+</div>
+
+<!-- ===================== SESSION SCREEN ===================== -->
+<div id="screen-session" class="screen">
+  <div class="session-header">
+    <div class="sess-progress">
+      <div class="sess-progress-bar"><div class="sess-progress-fill" id="sess-prog-fill" style="width:0%"></div></div>
+      <div class="sess-counter" id="sess-counter">Question 1 of 20</div>
+    </div>
+    <div class="sess-lives" id="sess-lives">💙💙💙</div>
+    <div class="sess-streak" id="sess-streak">🔥 0</div>
+    <div class="sess-timer" id="sess-timer">0:00</div>
+    <button class="sound-btn" id="sound-btn" onclick="toggleSound()" title="Toggle sound">🔊</button>
+    <button class="quit-btn" onclick="quitSession()">✕ Quit</button>
+  </div>
+  <div class="question-area" id="question-area">
+    <!-- filled by JS -->
+  </div>
+
+  <!-- MASCOT: Dăco the little golden dragon -->
+  <div class="mascot" id="mascot">
+    <div class="mascot-bubble" id="mascot-bubble"></div>
+    <svg class="mascot-svg" id="mascot-svg" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
+      <!-- Shadow -->
+      <ellipse cx="50" cy="97" rx="20" ry="4" fill="rgba(0,0,0,0.18)"/>
+      <!-- Tail -->
+      <path id="m-tail" d="M 62 76 Q 84 83 79 66" stroke="#c9a84c" stroke-width="6" fill="none" stroke-linecap="round"/>
+      <!-- Body -->
+      <ellipse cx="50" cy="65" rx="30" ry="26" fill="#e8c97a"/>
+      <!-- Belly -->
+      <ellipse cx="50" cy="70" rx="17" ry="13" fill="rgba(255,255,255,0.22)"/>
+      <!-- Wings -->
+      <path id="m-wing-l" d="M 23 56 Q 8 40 17 28 Q 22 44 31 48 Z" fill="#c9a84c" opacity="0.9"/>
+      <path id="m-wing-r" d="M 77 56 Q 92 40 83 28 Q 78 44 69 48 Z" fill="#c9a84c" opacity="0.9"/>
+      <!-- Head -->
+      <ellipse cx="50" cy="38" rx="27" ry="25" fill="#e8c97a"/>
+      <!-- Horns -->
+      <path d="M 32 18 L 26 4 L 37 14" fill="#c9a84c"/>
+      <path d="M 68 18 L 74 4 L 63 14" fill="#c9a84c"/>
+      <!-- Eye whites -->
+      <circle cx="39" cy="37" r="10" fill="white"/>
+      <circle cx="61" cy="37" r="10" fill="white"/>
+      <!-- Pupils -->
+      <circle id="m-pupil-l" cx="40" cy="38" r="5.5" fill="#1a1000"/>
+      <circle id="m-pupil-r" cx="62" cy="38" r="5.5" fill="#1a1000"/>
+      <!-- Eye shine -->
+      <circle cx="42" cy="36" r="2.2" fill="white"/>
+      <circle cx="64" cy="36" r="2.2" fill="white"/>
+      <!-- Cheeks -->
+      <circle cx="25" cy="49" r="7" fill="rgba(255,130,90,0.22)"/>
+      <circle cx="75" cy="49" r="7" fill="rgba(255,130,90,0.22)"/>
+      <!-- Nostrils -->
+      <circle cx="45" cy="47" r="2" fill="#c9a84c"/>
+      <circle cx="55" cy="47" r="2" fill="#c9a84c"/>
+      <!-- Mouth -->
+      <path id="m-mouth" d="M 39 53 Q 50 61 61 53" stroke="#7a3b00" stroke-width="2.5" fill="none" stroke-linecap="round"/>
+      <!-- Arms -->
+      <path id="m-arm-l" d="M 22 66 Q 10 72 12 83 Q 20 75 26 75 Z" fill="#e8c97a"/>
+      <path id="m-arm-r" d="M 78 66 Q 90 72 88 83 Q 80 75 74 75 Z" fill="#e8c97a"/>
+      <!-- Feet -->
+      <ellipse cx="37" cy="91" rx="12" ry="7" fill="#d4a830"/>
+      <ellipse cx="63" cy="91" rx="12" ry="7" fill="#d4a830"/>
+      <!-- Toe lines -->
+      <path d="M 30 95 L 27 99" stroke="#c9a84c" stroke-width="2" stroke-linecap="round"/>
+      <path d="M 37 96 L 35 100" stroke="#c9a84c" stroke-width="2" stroke-linecap="round"/>
+      <path d="M 56 95 L 53 99" stroke="#c9a84c" stroke-width="2" stroke-linecap="round"/>
+      <path d="M 63 96 L 61 100" stroke="#c9a84c" stroke-width="2" stroke-linecap="round"/>
+      <path d="M 70 95 L 68 99" stroke="#c9a84c" stroke-width="2" stroke-linecap="round"/>
+    </svg>
+    <div class="mascot-name">Dăco</div>
+  </div>
+
+  <div class="feedback" id="feedback-bar">
+    <div class="feedback-icon" id="fb-icon">✓</div>
+    <div class="feedback-body">
+      <div class="feedback-title" id="fb-title">Correct!</div>
+      <div class="feedback-exp" id="fb-exp"></div>
+    </div>
+    <button class="continue-btn" id="fb-continue" onclick="continueSession()">Continue</button>
+  </div>
+</div>
+
+<!-- ===================== RESULTS SCREEN ===================== -->
+<div id="screen-results" class="screen">
+  <div class="results-card">
+    <div class="results-emoji" id="res-emoji">🎉</div>
+    <div class="results-title" id="res-title">Session Complete!</div>
+    <div class="results-score"><span id="res-correct">0</span><span> / <span id="res-total">20</span></span></div>
+    <div class="results-stats">
+      <div class="res-stat"><div class="res-stat-val" id="res-xp">+0</div><div class="res-stat-lbl">XP Earned</div></div>
+      <div class="res-stat"><div class="res-stat-val" id="res-time">0:00</div><div class="res-stat-lbl">Time</div></div>
+      <div class="res-stat"><div class="res-stat-val" id="res-pct">0%</div><div class="res-stat-lbl">Accuracy</div></div>
+    </div>
+    <div class="results-msg" id="res-msg"></div>
+    <div class="results-btns">
+      <button class="btn-primary" onclick="startSession()">Joacă din nou</button>
+      <button class="btn-secondary" onclick="showScreen('home')">Acasă</button>
+    </div>
+    <div class="weak-areas" id="weak-areas"></div>
+    <div id="wrong-summary"></div>
+    <div id="booster-area"></div>
+  </div>
+</div>
+
+<script>
+// =====================================================================
+// CAIET DATA - AUTO-GENERATED FROM NOTEBOOK PAGES
+// Source: /Users/k/Documents/Romanian/ROM course/Caiet/
+// To update with new pages run: npm run refresh
+// =====================================================================
+/* CAIET_DATA_START */
+const METADATA = { lastUpdated: "2026-03-13", pagesProcessed: 14, totalPages: 14 };
+
+const MODULES = [
+{
+  id: 'greetings', name: 'Salutări & Prezentare', sub: 'Pagina 2',
+  icon: '👋', page: 2, color: '#e8c97a',
+  exercises: [
+    { type:'mc', q:'Care propoziție de prezentare este GREȘITĂ?', opts:['Eu am Ana.','Mă cheamă Ana.','Eu mă numesc Ana.','Eu sunt Ana.'], a:'Eu am Ana.', e:'"A avea" nu se folosește la prezentare. Corect: "Mă cheamă", "Mă numesc", "Eu sunt".', page:2 },
+    { type:'mc', q:'Completați: "Îmi ___ bine să te cunosc!"', opts:['pare','este','am','face'], a:'pare', e:'"Îmi pare bine" = Nice to meet you. "Pare" vine de la "a părea" (to seem).', page:2 },
+    { type:'fill', q:'Prietena ta spune "Ciao!" Tu răspunzi informal: "___!"', a:'Salut', alt:['Buna','Ciao'], e:'"Salut", "Bună" sau "Ciao" sunt toate salutări informale potrivite.', page:2 },
+    { type:'mc', q:'"Pe tine cum te cheamă?" este echivalentul lui:', opts:['Care este numele tău?','De unde ești?','Câți ani ai?','Cum ești?'], a:'Care este numele tău?', e:'"Pe tine cum te cheamă?" = "Care este numele tău?" = What is your name?', page:2 },
+    { type:'mc', q:'Cum spunem "I cannot wait!" în română?', opts:['Abia aștept!','Nu vă faceți griji!','Îmi pare rău!','La revedere!'], a:'Abia aștept!', e:'"Abia aștept!" = I cannot wait! "Abia" = barely/hardly + "aștept" = I wait.', page:2 },
+    { type:'fill', q:'Răspuns politicos la "Îmi pare bine": "___ mie!"', a:'Și', alt:['Si','si'], e:'"Și mie!" sau "Și eu la fel!" = Me too / Likewise.', page:2 },
+    { type:'mc', q:'Cum spunem "Do not worry!" la plural/formal?', opts:['Nu vă faceți griji!','Nu te face griji!','Nu faci griji!','Nu ai griji!'], a:'Nu vă faceți griji!', e:'"Nu vă faceți griji!" = formal/plural. "Nu-ți face griji!" = informal singular.', page:2 },
+    { type:'mc', q:'"Colegi de cameră" sunt:', opts:['Persoane care locuiesc împreună','Colegi de clasă','Colegi de muncă','Vecini'], a:'Persoane care locuiesc împreună', e:'"Colegi de cameră" = roommates. "Cameră" = room. Diferit de "colegi de clasă".', page:2 },
+    { type:'fill', q:'Despărțire caldă, informală: "___ pup!"', a:'Te', alt:['te'], e:'"Te pup!" = a warm, informal goodbye. Literal: I kiss you.', page:2 },
+    { type:'mc', q:'"Servus" este folosit în România ca:', opts:['Salut informal (sosire și plecare)','Numai la plecare','Salut formal','Expresie de mulțumire'], a:'Salut informal (sosire și plecare)', e:'"Servus" (din germană) se folosește și la întâlnire și la despărțire, ca "Ciao".', page:2 },
+    { type:'mc', q:'Care variantă este CORECTĂ pentru "I\'m happy to meet you"?', opts:['Mă bucur să te cunosc.','Eu bucur să te cunosc.','Bucuros te cunosc.','Mă face bucuros.'], a:'Mă bucur să te cunosc.', e:'Verbul reflexiv "a se bucura" necesită "mă". "Mă bucur" = I am glad.', page:2 },
+    { type:'fill', q:'"Fericit" înseamnă în engleză: "___"', a:'happy', alt:['Happy'], e:'"Fericit/Fericită" = happy. Opus: "Supărat/Supărată" = upset. "Trist" = sad.', page:2 },
+  ]
+},
+{
+  id: 'a_fi', name: 'Verbul "A fi"', sub: 'Pagina 3',
+  icon: '🔵', page: 3, color: '#5c9ae0',
+  exercises: [
+    { type:'mc', q:'Completați: "Noi ___ studenți la Universitate."', opts:['suntem','sunteți','sunt','este'], a:'suntem', e:'"Noi suntem" = we are. Conjugarea: sunt/ești/este/suntem/sunteți/sunt.', page:3 },
+    { type:'fill', q:'Negativ: "Ea nu ___ profesoară, este medic."', a:'este', alt:['e'], e:'"Ea nu este" sau "Ea nu e" = she is not.', page:3 },
+    { type:'mc', q:'Care propoziție este GREȘITĂ?', opts:['"El ești acasă."','"Eu sunt acasă."','"Noi suntem acasă."','"Ei sunt acasă."'], a:'"El ești acasă."', e:'"Ești" este pentru "Tu". "El/Ea" folosește "este" sau "e".', page:3 },
+    { type:'mc', q:'"Ei ___ colegi de cameră." — forma corectă:', opts:['sunt','este','suntem','sunteți'], a:'sunt', e:'"Ei/Ele sunt" = they are. Atenție: "Eu sunt" și "Ei sunt" — aceeași formă!', page:3 },
+    { type:'fill', q:'"Dumneavoastră ___ profesor?" (politețe)', a:'sunteți', e:'"Dumneavoastră sunteți" = you are (formal). Aceeași formă ca "Voi sunteți".', page:3 },
+    { type:'mc', q:'Forma scurtă negativă a lui "Eu nu sunt" este:', opts:['nu-s','nu-i','nu-e','nui'], a:'nu-s', e:'"Eu nu-s acasă" = colocvial pentru "Eu nu sunt acasă". "El nu-i" = "El nu este".', page:3 },
+    { type:'mc', q:'"El nu-i acasă" este echivalentul lui:', opts:['El nu este acasă','El nu-s acasă','El este acasă','El nu ești acasă'], a:'El nu este acasă', e:'"Nu-i" = forma scurtă de "nu este". Contracție colocvială frecventă.', page:3 },
+    { type:'fill', q:'"Tu ___ obosit sau ai energie?"', a:'ești', e:'"Tu ești" = you are. Persoana a doua singular a verbului "a fi".', page:3 },
+    { type:'mc', q:'Care este forma FORMALĂ pentru "you are"?', opts:['Dumneavoastră sunteți','Dumnealui sunteți','Ei sunteți','Voi este'], a:'Dumneavoastră sunteți', e:'"Dumneavoastră" = forma de politețe. Se folosește în situații oficiale.', page:3 },
+    { type:'mc', q:'"Ele nu sunt" înseamnă:', opts:['They (fem.) are not','She is not','We are not','You (pl.) are not'], a:'They (fem.) are not', e:'"Ele" = they (feminine). "Ei" = they (masculine/mixed). Ambele folosesc "sunt".', page:3 },
+    { type:'fill', q:'"___ bine, mulțumesc!" (I am fine)', a:'Sunt', alt:['sunt'], e:'"Sunt bine" = I am fine. Răspuns la "Cum ești?" sau "Ce mai faci?"', page:3 },
+    { type:'mc', q:'"Sunt" apare la persoanele:', opts:['Eu și Ei/Ele','Tu și Noi','El/Ea și Voi','Numai Eu'], a:'Eu și Ei/Ele', e:'Particularitate: "Eu sunt" și "Ei/Ele sunt" — aceeași formă!', page:3 },
+  ]
+},
+{
+  id: 'verbs', name: 'Verbe Prezente', sub: 'Paginile 3-6, 8, 10',
+  icon: '⚡', page: 3, color: '#e05c5c',
+  exercises: [
+    { type:'mc', q:'"___ la piață în fiecare zi." (eu, a merge)', opts:['Merg','Mergi','Merge','Mergem'], a:'Merg', e:'"A merge": merg/mergi/merge/mergem/mergeți/merg. "Eu" și "Ei" au aceeași formă!', page:3 },
+    { type:'fill', q:'"Tu ___ acasă sau stai?" (a merge)', a:'mergi', e:'"Tu mergi" = you go. Verbele de tip -e: merg/mergi/merge/mergem/mergeți/merg.', page:3 },
+    { type:'mc', q:'Care propoziție este GREȘITĂ pentru "a merge"?', opts:['"Eu merge acasă."','"Eu merg acasă."','"El merge acasă."','"Ei merg acasă."'], a:'"Eu merge acasă."', e:'"Merge" este pentru El/Ea, nu pentru Eu. "Eu merg" este corect.', page:3 },
+    { type:'mc', q:'"Ei ___ împreună la restaurant." (a merge)', opts:['merg','mergi','merge','mergeți'], a:'merg', e:'"Ei merg" = they go. Aceeași formă ca "Eu merg"!', page:3 },
+    { type:'mc', q:'"A sta" se conjugă la "eu":', opts:['stau','stai','stă','stăm'], a:'stau', e:'"A sta": stau/stai/stă/stăm/stați/stau. "Stau" = I stay/sit/live.', page:4 },
+    { type:'fill', q:'"El ___ în București de 10 ani." (a sta)', a:'stă', e:'"El stă" = he stays/lives. "A sta" în context de locuință = to live somewhere.', page:4 },
+    { type:'mc', q:'"Eu ___ o cafea, mulțumesc." (a vrea)', opts:['vreau','vrei','vrea','vrem'], a:'vreau', e:'"A vrea": vreau/vrei/vrea/vrem/vreți/vor. Atenție: "Ei VOR"!', page:4 },
+    { type:'mc', q:'Care este forma lui "a vrea" la "Ei"?', opts:['vor','vrea','vreau','vrem'], a:'vor', e:'"Ei/Ele vor" = they want. Formă neregulată de la "a voi".', page:4 },
+    { type:'fill', q:'"Tu ___ să mergi acasă?" (a vrea)', a:'vrei', e:'"Tu vrei" = you want. "Vrei să...?" = Do you want to...?', page:4 },
+    { type:'mc', q:'"Noi ___ pâine și lapte." (a cumpăra)', opts:['cumpărăm','cumpărați','cumpăr','cumpără'], a:'cumpărăm', e:'"A cumpăra": cumpăr/cumperi/cumpără/cumpărăm/cumpărați/cumpără.', page:5 },
+    { type:'fill', q:'"Tu ___ fructe la piață?" (a cumpăra)', a:'cumperi', e:'"Tu cumperi" — observați schimbarea ă→e în tulpină!', page:5 },
+    { type:'mc', q:'"Eu ___ sport dimineața." (a face)', opts:['fac','faci','face','facem'], a:'fac', e:'"A face": fac/faci/face/facem/faceți/fac.', page:5 },
+    { type:'fill', q:'"Ei ___ temele împreună." (a face)', a:'fac', e:'"Ei fac" = they do. "Teme" = homework. Aceeași formă ca "Eu fac".', page:5 },
+    { type:'mc', q:'"Eu ___ salată la prânz." (a mânca)', opts:['mănânc','mănânci','mănâncă','mâncăm'], a:'mănânc', e:'"A mânca": mănânc/mănânci/mănâncă/mâncăm/mâncați/mănâncă.', page:5 },
+    { type:'fill', q:'"El ___ pizza cu prietenii." (a mânca)', a:'mănâncă', e:'"El mănâncă" — aceeași formă pentru El, Ea, Ei, Ele.', page:5 },
+    { type:'mc', q:'"Eu ___ ceai dimineața." (a bea)', opts:['beau','bei','bea','bem'], a:'beau', e:'"A bea": beau/bei/bea/bem/beți/beau. Verb scurt și neregulat.', page:6 },
+    { type:'fill', q:'"Tu ___ apă sau suc?" (a bea)', a:'bei', e:'"Tu bei" = you drink. "Bei apă?" = Do you drink water?', page:6 },
+    { type:'mc', q:'Verbele "a lucra" urmează modelul:', opts:['-ez/-ezi/-ează','-esc/-ești/-ește','merg/mergi/merge','-m/-ți/-ă'], a:'-ez/-ezi/-ează', e:'Eu lucrez, tu lucrezi, el lucrează... Terminația -ez = verbe de tip I.', page:8 },
+    { type:'mc', q:'Verbele "a vorbi" urmează modelul:', opts:['-esc/-ești/-ește','-ez/-ezi/-ează','-m/-ți/-ă','-u/-i/-ă'], a:'-esc/-ești/-ește', e:'Eu vorbesc, tu vorbești, el vorbește... Terminația -esc = verbe de tip IV.', page:8 },
+    { type:'mc', q:'"Eu am timp liber." — care verb?', opts:['A avea','A fi','A face','A merge'], a:'A avea', e:'"A avea" = to have. Conjugare: am/ai/are/avem/aveți/au.', page:10 },
+    { type:'fill', q:'"Ei ___ o idee grozavă." (a avea)', a:'au', e:'"Ei/Ele au" = they have. Nu confundați cu "Eu am"!', page:10 },
+  ]
+},
+{
+  id: 'family', name: 'Familie & Profesii', sub: 'Paginile 3, 10',
+  icon: '👨‍👩‍👧', page: 3, color: '#4caf7d',
+  exercises: [
+    { type:'mc', q:'"Mama tatălui meu" este:', opts:['Bunica mea','Mătușa mea','Sora mea','Nora mea'], a:'Bunica mea', e:'"Mama tatălui" = bunica paternă. "Bunic" = grandfather. "Bunică" = grandmother.', page:3 },
+    { type:'fill', q:'"Un frate, două ___" (pluralul lui soră)', a:'surori', e:'"Soră" → "surori" — plural NEREGULAT! Trebuie memorat.', page:3 },
+    { type:'mc', q:'Care plural este NEREGULAT?', opts:['soră → surori','masă → mese','carte → cărți','ușă → uși'], a:'soră → surori', e:'"Surori" este neregulat. Celelalte urmează reguli normale.', page:3 },
+    { type:'mc', q:'"Nepotul meu" poate să fie:', opts:['Fiul fiului SAU fiul fratelui','Numai fiul fiului meu','Numai fiul fratelui meu','Fiul meu'], a:'Fiul fiului SAU fiul fratelui', e:'"Nepot" = grandson sau nephew. Contextul determină sensul.', page:3 },
+    { type:'fill', q:'"Vărul meu" este fiul unchiului sau al ___ mele.', a:'mătușii', alt:['matusii'], e:'"Văr" = male cousin. Copilul unchiului sau al mătușii.', page:3 },
+    { type:'mc', q:'"Copil" la plural devine:', opts:['"copii" (excepție!)','"copile"','"copili"','"copiți"'], a:'"copii" (excepție!)', e:'"Copil" → "copii" — excepție importantă! Normal ar fi "copili".', page:3 },
+    { type:'mc', q:'"Soția" vs "soțul" — care este masculin?', opts:['Soțul','Soția','Ambele','Niciunul'], a:'Soțul', e:'"Soț" = husband. "Soție" = wife. Cu articol: "soțul" / "soția".', page:3 },
+    { type:'fill', q:'"___ meu este medic." (my husband)', a:'Soțul', alt:['sotul','Sotul'], e:'"Soțul meu" = my husband. "Soția mea" = my wife.', page:3 },
+    { type:'mc', q:'"Frizer" înseamnă:', opts:['Barber/coafor','Pompier','Bucătar','Profesor'], a:'Barber/coafor', e:'"Frizer" = barber. "Frizerie" = barbershop. "Bucătar" = chef.', page:10 },
+    { type:'mc', q:'"Pompier" vine din:', opts:['Franceză','Engleză','Italiană','Germană'], a:'Franceză', e:'"Pompier" = firefighter, împrumutat din franceză.', page:10 },
+    { type:'fill', q:'Pluralul lui "frate" este: ___', a:'frați', e:'"Frate" → "frați". Regula: -te + -i → -ți.', page:3 },
+    { type:'mc', q:'"Fiica mea" înseamnă:', opts:['My daughter','My son','My niece','My granddaughter'], a:'My daughter', e:'"Fiică" = daughter. "Fiu" = son. "Fiica mea" / "fiul meu".', page:3 },
+  ]
+},
+{
+  id: 'time', name: 'Timp & Calendar', sub: 'Paginile 7-9',
+  icon: '🕐', page: 7, color: '#b05ce0',
+  exercises: [
+    { type:'mc', q:'Care zi vine DUPĂ "Miercuri"?', opts:['Joi','Vineri','Marți','Luni'], a:'Joi', e:'Luni→Marți→Miercuri→Joi→Vineri→Sâmbătă→Duminică.', page:7 },
+    { type:'fill', q:'Zilele de weekend: Sâmbătă și ___', a:'Duminică', alt:['Duminica','duminica','duminică'], e:'"Sâmbătă" = Saturday. "Duminică" = Sunday.', page:7 },
+    { type:'mc', q:'Cum spunem "every Monday" (recurent)?', opts:['Lunea','Luni','În fiecare luni','De luni'], a:'Lunea', e:'Regulă: zi + "-a" = recurent. Lunea, Marțea, Miercurea, Joia...', page:7 },
+    { type:'mc', q:'"Sâmbăta" înseamnă:', opts:['Every Saturday','Last Saturday','Next Saturday','This Saturday'], a:'Every Saturday', e:'"Sâmbăta" = every Saturday. Nu "Sâmbătea" — excepție!', page:7 },
+    { type:'fill', q:'Luna a 9-a a anului este:', a:'Septembrie', alt:['septembrie'], e:'Ian, Feb, Mar, Apr, Mai, Iun, Iul, Aug, Sep, Oct, Nov, Dec.', page:8 },
+    { type:'mc', q:'Care lună vine ÎNAINTE de "Noiembrie"?', opts:['Octombrie','Decembrie','Septembrie','August'], a:'Octombrie', e:'Ordinea: ...Sep→Oct→Nov→Dec. Octombrie = luna 10.', page:8 },
+    { type:'fill', q:'Primul anotimp al anului:', a:'Iarna', alt:['iarna'], e:'Iarna(winter)→Primăvara(spring)→Vara(summer)→Toamna(autumn).', page:9 },
+    { type:'mc', q:'"Toamna" este echivalentul lui:', opts:['Autumn/Fall','Summer','Spring','Winter'], a:'Autumn/Fall', e:'"Toamna" = autumn. "Iarna" = winter. "Vara" = summer.', page:9 },
+    { type:'mc', q:'"Ieri a fost luni, azi e marți. Mâine va fi ___."', opts:['Miercuri','Joi','Vineri','Luni'], a:'Miercuri', e:'"Mâine" = tomorrow. Luni→Marți→Miercuri.', page:7 },
+    { type:'mc', q:'"Alaltăieri" înseamnă:', opts:['Ziua de dinainte de ieri','Ieri','Azi-dimineață','Luna trecută'], a:'Ziua de dinainte de ieri', e:'Seria: Alaltăieri→Ieri→Azi→Mâine→Poimâine→Răspoimâine.', page:7 },
+    { type:'fill', q:'"Cât e ___?" (What time is it?)', a:'ora', alt:['ceasul'], e:'"Cât e ora?" = What time is it? Răspuns: "E ora trei."', page:9 },
+    { type:'mc', q:'"La ce oră?" înseamnă:', opts:['At what time?','What time is it?','How much time?','Since when?'], a:'At what time?', e:'"La ce oră?" = At what time? Răspuns: "La ora..."', page:9 },
+    { type:'mc', q:'"Dimineața" ca frecvență înseamnă:', opts:['Every morning','In the morning','Good morning','Early'], a:'Every morning', e:'"Dimineața" = every morning (frecvență). "Bună dimineața!" = Good morning!', page:9 },
+    { type:'fill', q:'"Day after tomorrow" se spune:', a:'Poimâine', alt:['poimâine','poimaine'], e:'"Poimâine" = day after tomorrow. "Răspoimâine" = two days after tomorrow.', page:7 },
+  ]
+},
+{
+  id: 'plurals', name: 'Pluralul', sub: 'Paginile 11-13',
+  icon: '🔤', page: 11, color: '#e09c5c',
+  exercises: [
+    { type:'mc', q:'Regula generală pluralul masculin (consoană finală):', opts:['+ "-i"','+ "-e"','Schimbare totală','+ "-uri"'], a:'+ "-i"', e:'Masculine: consoană + "-i": student→studenți, pom→pomi, profesor→profesori.', page:11 },
+    { type:'fill', q:'Pluralul lui "pom" (copac, m.):', a:'pomi', e:'"Pom" → "pomi". Regula: consoană + "-i" pentru masculine.', page:11 },
+    { type:'mc', q:'Care plural masculin este GREȘIT?', opts:['"câine" → "câinuri"','"câine" → "câini"','"munte" → "munți"','"fiu" → "fii"'], a:'"câine" → "câinuri"', e:'"Câine" → "câini" (corect!). "-uri" este pentru neutre, nu masculine!', page:11 },
+    { type:'fill', q:'Pluralul lui "munte" (m.):', a:'munți', e:'"Munte" → "munți". Regula: -te + -i → -ți. dinte→dinți, părinte→părinți.', page:11 },
+    { type:'mc', q:'Excepție la masculine: "copil" → ?', opts:['"copii"','"copile"','"copili"','"copiți"'], a:'"copii"', e:'"Copil" → "copii" — EXCEPȚIE! Normal ar fi "copili".', page:12 },
+    { type:'fill', q:'Cel mai neregulat plural: "om" → ___', a:'oameni', e:'"Om" → "oameni" — complet neregulat! "Cal" → "cai" tot neregulat.', page:12 },
+    { type:'mc', q:'Regula pentru feminin în "-ă":', opts:['"-ă" → "-e"','"-ă" → "-i"','"-ă" → "-uri"','"-ă" → "-elor"'], a:'"-ă" → "-e"', e:'Feminine: masă→mese, fată→fete. Excepții: ușă→uși, mașină→mașini.', page:11 },
+    { type:'fill', q:'Pluralul lui "ușă" (f.) — EXCEPȚIE:', a:'uși', e:'"Ușă" → "uși". Excepție: "-ă" → "-i". mașină→mașini, bibliotecă→biblioteci.', page:11 },
+    { type:'mc', q:'"Carte" (f.) → plural:', opts:['cărți','carte','cartele','carti'], a:'cărți', e:'"Carte" → "cărți". Feminine "-e" → "-i" cu schimbare vocalică.', page:12 },
+    { type:'fill', q:'Pluralul NEREGULAT al lui "zi" (f.):', a:'zile', e:'"Zi" → "zile" — excepție! Regulat ar fi "zii". "Soră" → "surori" tot neregulat.', page:12 },
+    { type:'mc', q:'Neutre: "caiet" → plural:', opts:['caiete','caieți','caieti','caietele'], a:'caiete', e:'Neutre + "-e": caiet→caiete, scaun→scaune. Neutrul = masculin sg, feminin pl!', page:13 },
+    { type:'fill', q:'Pluralul lui "pix" (n.) cu "-uri":', a:'pixuri', e:'"Pix" → "pixuri". Neutre + "-uri": curs→cursuri, birou→birouri.', page:13 },
+    { type:'mc', q:'Excepție la neutre: "ou" → ?', opts:['ouă','oui','oue','oule'], a:'ouă', e:'"Ou" → "ouă" — excepție clasică! "Ouă fierte" = boiled eggs.', page:13 },
+    { type:'mc', q:'Femininele și neutrele au aceleași terminații la:', opts:['Plural','Singular','Ambele','Niciunul'], a:'Plural', e:'Neutrul = masculin la sg, feminin la pl. "Un caiet / două caiete" ca "o fată / două fete".', page:13 },
+  ]
+},
+{
+  id: 'prepositions', name: 'Prepozițiile', sub: 'Pagina 5',
+  icon: '📍', page: 5, color: '#5ce0c9',
+  exercises: [
+    { type:'mc', q:'"Merg ___ curs." — care prepoziție?', opts:['la','în','pe','sub'], a:'la', e:'"La curs" = to/at the course. "La" pentru: la curs, la munte, la piață, la etaj.', page:5 },
+    { type:'mc', q:'"Stau ___ cameră." — care prepoziție?', opts:['în','la','pe','lângă'], a:'în', e:'"În cameră" = in the room. "În" pentru spații ÎNCHISE: cameră, casă, clasă.', page:5 },
+    { type:'fill', q:'"Sunt ___ București." (I am in Bucharest)', a:'în', alt:['in'], e:'"În" pentru orașe și țări: în București, în România, în Paris.', page:5 },
+    { type:'mc', q:'Care folosire a lui "în" este CORECTĂ?', opts:['în clasă','în munte','în piață','în etaj'], a:'în clasă', e:'"În clasă" ✓. "La munte/piață/etaj" (nu "în") pentru locuri deschise.', page:5 },
+    { type:'mc', q:'"Merg ___ munte în weekend."', opts:['la','în','pe','spre'], a:'la', e:'"La munte" = to the mountain. "La" = destinații non-închise.', page:5 },
+    { type:'fill', q:'"Vin ___ parc cu prietenii."', a:'în', alt:['in'], e:'"În parc" = in/to the park. Româna folosește "în" pentru parcuri.', page:5 },
+    { type:'mc', q:'"Cartea e ___ masă." (ON the table)', opts:['pe','în','sub','la'], a:'pe', e:'"Pe" = on. "Sub" = under. "În masă" = inside the table!', page:5 },
+    { type:'mc', q:'"Pisica e ___ masă." (UNDER the table)', opts:['sub','pe','în','lângă'], a:'sub', e:'"Sub" = under. "Lângă" = next to. "Între" = between.', page:5 },
+    { type:'fill', q:'"Parcul e ___ clădiri." (BETWEEN)', a:'între', alt:['intre'], e:'"Între" = between. "Între noi" = between us.', page:5 },
+    { type:'mc', q:'Care propoziție folosește CORECT "la"?', opts:['La etaj','La cameră','La casă','La centru'], a:'La etaj', e:'"La etaj" ✓. "În cameră", "în casă" (nu "la").', page:5 },
+    { type:'mc', q:'"În mașină" sau "La mașină"?', opts:['În mașină','La mașină','Ambele','Niciuna'], a:'În mașină', e:'Vehiculele folosesc "în": în tren, în avion, în mașină.', page:5 },
+    { type:'mc', q:'"Acasă" necesită prepoziție?', opts:['Nu — "Merg acasă"','Da — "Merg la acasă"','Da — "Merg în acasă"','Depinde'], a:'Nu — "Merg acasă"', e:'"Acasă" = home. Fără prepoziție! "Aici", "acolo", "afară" la fel.', page:5 },
+  ]
+},
+{
+  id: 'vocabulary', name: 'Vocabular General', sub: 'Paginile 1, 4, 9, 10',
+  icon: '📖', page: 1, color: '#e05ca0',
+  exercises: [
+    { type:'mc', q:'"Inimă" și "sânge" — ce e "sânge"?', opts:['Blood','Heart','Vein','Pulse'], a:'Blood', e:'"Sânge" = blood. "Inimă" = heart. "Donare de sânge" = blood donation.', page:1 },
+    { type:'fill', q:'"Unghia" e parte a ___-ului. (finger)', a:'degetului', alt:['deget'], e:'"Unghie" = nail. "Deget" = finger. "Picior" = foot/leg.', page:1 },
+    { type:'mc', q:'"Gât" poate însemna:', opts:['Neck AND throat','Only neck','Only throat','Shoulder'], a:'Neck AND throat', e:'"Gât" = neck/throat. "Mă doare gâtul" = My throat/neck hurts.', page:1 },
+    { type:'fill', q:'"Cade ___ afară!" (It\'s snowing!)', a:'zăpadă', alt:['zapada','ninsoare'], e:'"Zăpadă" = snow. "Ninge" = it snows. "Gheață" = ice.', page:9 },
+    { type:'mc', q:'"Pădure" vs "Grădină" — care e "forest"?', opts:['Pădure','Grădină','Curte','Câmp'], a:'Pădure', e:'"Pădure" = forest. "Grădină" = garden. "Curte" = yard. "Câmp" = field.', page:4 },
+    { type:'fill', q:'"___ strălucește astăzi!" (The sun...)', a:'Soarele', alt:['Soare','soarele'], e:'"Soarele" = the sun. "Strălucește" = shines. "Stele" = stars.', page:9 },
+    { type:'mc', q:'"Ghiozdan" vs "geantă":', opts:['Ghiozdan = backpack, Geantă = bag','Ghiozdan = bag, Geantă = backpack','Sunt sinonime','Ghiozdan = wallet'], a:'Ghiozdan = backpack, Geantă = bag', e:'"Ghiozdan" = backpack/school bag. "Geantă" = bag/purse. "Portofel" = wallet.', page:4 },
+    { type:'fill', q:'"Mă uit în ___." (I look in the mirror)', a:'oglindă', alt:['oglinda'], e:'"Oglindă" = mirror. Plural: "oglinzi".', page:4 },
+    { type:'mc', q:'"Ciorapi" = ?', opts:['Șosete (socks)','Ghete (boots)','Pantofi (shoes)','Mănuși (gloves)'], a:'Șosete (socks)', e:'"Ciorapi" = "șosete" = socks. Ambele cuvinte sunt folosite.', page:4 },
+    { type:'mc', q:'"Plapumă" vs "pernă" — care e "pillow"?', opts:['Pernă','Plapumă','Cearsaf','Saltea'], a:'Pernă', e:'"Pernă" = pillow. "Plapumă" = blanket. "Cearsaf" = sheet. "Saltea" = mattress.', page:4 },
+    { type:'fill', q:'"Camera mea are o ___." (nightstand)', a:'noptieră', alt:['noptiera'], e:'"Noptieră" = nightstand. "Dulap" = wardrobe. "Etajeră" = shelf.', page:4 },
+    { type:'mc', q:'"Bucătărie" vs "Sufragerie":', opts:['Kitchen vs Dining room','Dining room vs Kitchen','Both = kitchen','Kitchen vs Bathroom'], a:'Kitchen vs Dining room', e:'"Bucătărie" = kitchen. "Sufragerie" = dining room. "Dormitor" = bedroom.', page:4 },
+    { type:'fill', q:'"Spăl rufele cu ___ de spălat." (washing...)', a:'mașina', alt:['masina'], e:'"Mașina de spălat" = washing machine. "Mașina de spălat vase" = dishwasher.', page:10 },
+    { type:'mc', q:'"Vecin" înseamnă:', opts:['Neighbour','Friend','Colleague','Relative'], a:'Neighbour', e:'"Vecin/Vecină" = neighbour. "Vecini" = neighbours.', page:10 },
+    { type:'mc', q:'"Cântec" vs "muzică" — care e "song"?', opts:['Cântec','Muzică','Melodie','Ritm'], a:'Cântec', e:'"Cântec" = song. "Muzică" = music. "A cânta" = to sing.', page:10 },
+  ]
+},
+{
+  id: 'expressions', name: 'Expresii Utile', sub: 'Paginile 2, 4, 6, 13',
+  icon: '💬', page: 6, color: '#a0e05c',
+  exercises: [
+    { type:'mc', q:'"Ai dreptate!" înseamnă:', opts:['You\'re right!','You have rights!','You\'re left!','It\'s correct!'], a:'You\'re right!', e:'"A avea dreptate" = to be right. "N-ai dreptate" = You\'re wrong.', page:6 },
+    { type:'fill', q:'"Nu ___ chef să ies azi." (don\'t feel like)', a:'am', e:'"A avea chef de" = to feel like. "Nu am chef" = I don\'t feel like it.', page:6 },
+    { type:'mc', q:'"Am nevoie de ajutor." = ?', opts:['I need help.','I have help.','I want help.','I give help.'], a:'I need help.', e:'"A avea nevoie de" = to need. "Ai nevoie de ceva?" = Do you need anything?', page:6 },
+    { type:'mc', q:'"Nu ai voie să fumezi aici!" = ?', opts:['You\'re not allowed to smoke here!','You don\'t want to smoke!','Please don\'t smoke!','Smoking is bad!'], a:'You\'re not allowed to smoke here!', e:'"A avea voie" = to be allowed. "Nu ai voie" = you\'re not allowed.', page:6 },
+    { type:'fill', q:'"Ai ___ de tine!" (Take care!)', a:'grijă', alt:['grija'], e:'"A avea grijă de" = to take care of. "Ai grijă!" = Be careful!', page:6 },
+    { type:'mc', q:'"Fiindcă", "Deoarece", "Pentrucă" = ?', opts:['Because','Therefore','Although','However'], a:'Because', e:'Toate trei = "because". Sinonime perfecte. "De aceea" = that\'s why.', page:13 },
+    { type:'mc', q:'"Din păcate" vs "Din fericire" — care e "unfortunately"?', opts:['Din păcate','Din fericire','Ambele','Niciuna'], a:'Din păcate', e:'"Din păcate" = unfortunately. "Din fericire" = fortunately.', page:13 },
+    { type:'fill', q:'"___ de bine, mulțumesc!" (Quite well)', a:'Destul', alt:['destul'], e:'"Destul de bine" = quite well. "Destul" = enough/quite.', page:4 },
+    { type:'mc', q:'"Spor la treabă!" = ?', opts:['Good luck with your work!','Enjoy your meal!','Have a good trip!','Good morning!'], a:'Good luck with your work!', e:'"Spor la treabă!" "Spor" = progress. "Treabă" = work/task.', page:2 },
+    { type:'fill', q:'"Abia ___!" (I can\'t wait!)', a:'aștept', alt:['astept'], e:'"Abia aștept!" = I can\'t wait! "Abia" = barely + "aștept" = I wait.', page:2 },
+    { type:'mc', q:'"Ora două și jumătate" = ?', opts:['2:30','2:15','2:45','2:00'], a:'2:30', e:'"Și jumătate" = half past. "Jumate" = informal.', page:6 },
+    { type:'mc', q:'"Ora patru și un sfert" = ?', opts:['4:15','4:30','4:45','4:00'], a:'4:15', e:'"Și un sfert" = quarter past. "Un sfert" = a quarter.', page:6 },
+    { type:'mc', q:'"De aceea" introduce:', opts:['O consecință (that\'s why)','O cauză (because)','O condiție (if)','Un contrast (however)'], a:'O consecință (that\'s why)', e:'"De aceea" = that\'s why. Introduce rezultatul. "Fiindcă" introduce cauza.', page:13 },
+    { type:'fill', q:'"___ se află gara?" (Where is the station?)', a:'Unde', alt:['unde'], e:'"Unde se află...?" = Where is... located? "Se află" = is located.', page:4 },
+  ]
+},
+{
+  id: 'quantity', name: 'Cantitate & Containere', sub: 'Pagina 14',
+  icon: '🛒', page: 14, color: '#5c7ae0',
+  exercises: [
+    { type:'mc', q:'"O felie" vs "O bucată" — care e "a slice"?', opts:['O felie','O bucată','Ambele','Niciuna'], a:'O felie', e:'"Felie" = slice (subțire). "Bucată" = piece (mai mare).', page:14 },
+    { type:'fill', q:'"Un ___ de dulceață" (a jar of jam)', a:'borcan', e:'"Borcan" = jar. "Borcan de miere" = jar of honey.', page:14 },
+    { type:'mc', q:'"O pungă de orez" — "pungă" = ?', opts:['A bag','A box','A can','A jar'], a:'A bag', e:'"Pungă" = bag. "Geantă" = handbag (diferit!). "Plasă" = shopping bag.', page:14 },
+    { type:'fill', q:'"O ___ de lapte" (a carton)', a:'cutie', alt:['sticla','sticlă'], e:'"Cutie" = box/carton. "Sticlă" = bottle. "Cutie de suc" = juice carton.', page:14 },
+    { type:'mc', q:'"Mulți studenți" vs "Multe studente" — regula:', opts:['Mulți = m.pl., Multe = f./n.pl.','Mulți = f.pl., Multe = m.pl.','La fel','Mulți = singular'], a:'Mulți = m.pl., Multe = f./n.pl.', e:'Mulți + masc.pl. Multe + fem./neutru pl. Mult + m./n.sg. Multă + f.sg.', page:14 },
+    { type:'fill', q:'"___ apă, te rog." (A lot of water)', a:'Multă', alt:['multa','Multa'], e:'"Multă apă" — "apă" = feminin sg. Forme: Mult/Multă/Mulți/Multe.', page:14 },
+    { type:'mc', q:'"Numai" vs "Nu mai" — care = "only"?', opts:['Numai (un cuvânt)','Nu mai (două cuvinte)','Ambele','Niciuna'], a:'Numai (un cuvânt)', e:'"Numai" = only. "Nu mai" + verb = not anymore. Total diferit!', page:14 },
+    { type:'mc', q:'"Nu mai mănânc." vs "Numai mănânc.":', opts:['"Nu mai" = not anymore; "Numai" = only','"Nu mai" = only; "Numai" = not anymore','Același lucru','Ambele greșite'], a:'"Nu mai" = not anymore; "Numai" = only', e:'CRUCIALĂ: "Nu mai mănânc" = not anymore. "Numai mănânc" = I only eat.', page:14 },
+    { type:'mc', q:'Care substantiv NU are plural?', opts:['Lapte (milk)','Caiet (notebook)','Student','Scaun (chair)'], a:'Lapte (milk)', e:'Nenumărabile fără plural: lapte, apă, brânză, unt, suc, carne, sare, zahăr.', page:14 },
+    { type:'fill', q:'"Periuță de ___" = toothbrush (teeth)', a:'dinți', alt:['dinti'], e:'"Periuță de dinți" = toothbrush. "Pastă de dinți" = toothpaste. "Dinți" pl. of "dinte".', page:14 },
+    { type:'mc', q:'"Un pachet de biscuiți" — "pachet" = ?', opts:['A pack/packet','A bag','A box','A jar'], a:'A pack/packet', e:'"Pachet" = pack/packet. "Un pachet de cafea" = a pack of coffee.', page:14 },
+    { type:'fill', q:'"Mult timp" vs "Multă ___" (water)', a:'apă', alt:['apa'], e:'"Mult timp" (neutru sg.) "Multă apă" (feminin sg.). Acordul e obligatoriu!', page:14 },
+  ]
+}
+];
+/* CAIET_DATA_END */
+
+// =====================================================================
+// STATE MANAGEMENT
+// =====================================================================
+const STORAGE_KEY = 'ro_caiet_v1';
+let S = { xp: 0, streak: 0, lastDate: null, modProgress: {}, mistakeLog: {} };
+
+function loadS() {
+  try { const d = JSON.parse(localStorage.getItem(STORAGE_KEY)); if(d) S = {...S, ...d}; }
+  catch(e) {}
+}
+function saveS() {
+  try { localStorage.setItem(STORAGE_KEY, JSON.stringify(S)); } catch(e) {}
+}
+function modProg(id) {
+  return S.modProgress[id] || { correct: 0, total: 0 };
+}
+
+// =====================================================================
+// SESSION LOGIC
+// =====================================================================
+let sess = null, timerInterval = null;
+
+function startSession(moduleId = null) {
+  // Update streak
+  const today = new Date().toDateString();
+  if (S.lastDate !== today) {
+    const yesterday = new Date(Date.now() - 86400000).toDateString();
+    if (S.lastDate === yesterday) { S.streak++; } else { S.streak = 1; }
+    S.lastDate = today;
+    saveS();
+  }
+
+  // Pick questions
+  let pool = [];
+  if (moduleId) {
+    const mod = MODULES.find(m => m.id === moduleId);
+    if (mod) pool = mod.exercises.map(e => ({...e, moduleId, moduleName: mod.name}));
+  } else {
+    MODULES.forEach(m => m.exercises.forEach(e => pool.push({...e, moduleId: m.id, moduleName: m.name})));
+  }
+  // Shuffle
+  for (let i = pool.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+    [pool[i], pool[j]] = [pool[j], pool[i]];
+  }
+  const target = moduleId ? pool.length : Math.min(20, pool.length);
+  pool = pool.slice(0, target);
+
+  // Sort by difficulty: easy first, hard last (gradual ramp)
+  pool.sort((a, b) => qDiff(a) - qDiff(b));
+
+  sess = { questions: pool, idx: 0, score: 0, lives: 3, streak: 0, startTime: Date.now(), results: [], wrongModules: {}, wrongQs: [] };
+  showScreen('session');
+  startTimer();
+  randomizeMascotColors();
+  setMascotState('idle');
+  document.getElementById('mascot').classList.add('visible');
+  renderQuestion();
+}
+
+function startTimer() {
+  if (timerInterval) clearInterval(timerInterval);
+  timerInterval = setInterval(() => {
+    if (!sess) return;
+    const elapsed = Math.floor((Date.now() - sess.startTime) / 1000);
+    const m = Math.floor(elapsed / 60), s = elapsed % 60;
+    document.getElementById('sess-timer').textContent = `${m}:${s.toString().padStart(2,'0')}`;
+  }, 1000);
+}
+
+function renderQuestion() {
+  if (!sess || sess.idx >= sess.questions.length) { endSession(); return; }
+  const q = sess.questions[sess.idx];
+  const total = sess.questions.length;
+
+  // Progress
+  document.getElementById('sess-prog-fill').style.width = `${(sess.idx / total) * 100}%`;
+  document.getElementById('sess-counter').textContent = `Întrebarea ${sess.idx + 1} din ${total}`;
+  document.getElementById('sess-lives').textContent = '💙'.repeat(sess.lives) + '🤍'.repeat(3 - sess.lives);
+  document.getElementById('sess-streak').textContent = sess.streak > 1 ? `🔥 ${sess.streak}` : '';
+
+  const area = document.getElementById('question-area');
+  const mod = MODULES.find(m => m.id === q.moduleId);
+  // Set module accent color
+  const mColor = mod && mod.color ? mod.color : '#c9a84c';
+  document.documentElement.style.setProperty('--module-color', mColor);
+  let html = `<div class="q-module-badge">${mod ? mod.icon + ' ' + mod.name : ''}</div>`;
+  html += `<div class="q-text">${q.q}</div>`;
+  if (q.note) html += `<div class="q-note">${q.note}</div>`;
+
+  if (q.type === 'mc') {
+    html += `<div class="mc-options">`;
+    const shuffled = shuffleArr([...q.opts]);
+    shuffled.forEach((opt, i) => {
+      html += `<button class="mc-opt" onclick="checkMC(this)" data-val="${escHtml(opt)}">${opt}</button>`;
+    });
+    html += `</div>`;
+  } else if (q.type === 'fill') {
+    html += `<div class="fill-wrap">
+      <input class="fill-input" id="fill-inp" type="text" placeholder="Type your answer..." autocomplete="off" spellcheck="false" onkeydown="if(event.key==='Enter'){submitFill();event.stopPropagation();}">
+      <button class="submit-btn" id="fill-submit" onclick="submitFill()">Check Answer</button>
+    </div>`;
+  } else if (q.type === 'order') {
+    const shuffledWords = shuffleArr([...q.words]);
+    html += `<div class="word-order-area">
+      <div id="word-slots" class="word-slots" onclick="unselectSlotWord(event)"></div>
+      <div class="word-bank" id="word-bank">`;
+    shuffledWords.forEach((w, i) => {
+      html += `<button class="word-chip" id="wc-${i}" onclick="addWordToSlot(this,'${escHtml(w)}')">${w}</button>`;
+    });
+    html += `</div>
+      <button class="submit-btn" onclick="submitOrder()">Check Order</button>
+    </div>`;
+  }
+
+  area.innerHTML = html;
+  hideFeedback();
+  if (q.type === 'fill') { setTimeout(() => document.getElementById('fill-inp')?.focus(), 100); }
+}
+
+function shuffleArr(arr) {
+  for (let i = arr.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+    [arr[i], arr[j]] = [arr[j], arr[i]];
+  }
+  return arr;
+}
+
+function escHtml(s) {
+  return s.replace(/'/g,"&#39;").replace(/"/g,'&quot;');
+}
+
+function addWordToSlot(btn, word) {
+  const slots = document.getElementById('word-slots');
+  btn.classList.add('placed');
+  const chip = document.createElement('button');
+  chip.className = 'word-chip in-slot';
+  chip.textContent = word;
+  chip.dataset.src = btn.id;
+  chip.onclick = () => {
+    document.getElementById(btn.id)?.classList.remove('placed');
+    chip.remove();
+    const s = document.getElementById('word-slots');
+    if (s) s.classList.toggle('has-words', s.querySelectorAll('.word-chip').length > 0);
+  };
+  slots.appendChild(chip);
+  slots.classList.add('has-words');
+}
+
+function submitOrder() {
+  const slots = document.getElementById('word-slots');
+  const placed = [...slots.querySelectorAll('.word-chip')].map(c => c.textContent);
+  const q = sess.questions[sess.idx];
+  const correct = JSON.stringify(placed) === JSON.stringify(q.answer);
+  processAnswer(correct, q, placed.join(' '));
+}
+
+function checkMC(btn) {
+  const val = btn.dataset.val;
+  const q = sess.questions[sess.idx];
+  const correct = val === q.a;
+  document.querySelectorAll('.mc-opt').forEach(b => b.disabled = true);
+  btn.classList.add(correct ? 'correct' : 'wrong');
+  if (!correct) {
+    document.querySelectorAll('.mc-opt').forEach(b => {
+      if (b.dataset.val === q.a) b.classList.add('correct');
+    });
+  }
+  processAnswer(correct, q, val);
+}
+
+function submitFill() {
+  const inp = document.getElementById('fill-inp');
+  if (!inp) return;
+  const val = inp.value.trim();
+  if (!val) return;
+  const q = sess.questions[sess.idx];
+  const normalize = s => s.toLowerCase().trim()
+    .replace(/[ăâ]/g,'a').replace(/[îÎ]/g,'i').replace(/[șş]/g,'s').replace(/[țţ]/g,'t');
+  const normVal = normalize(val);
+  const normAns = normalize(q.a);
+  let correct = normVal === normAns;
+  if (!correct && q.alt) {
+    correct = q.alt.some(a => normalize(a) === normVal);
+  }
+  inp.classList.add(correct ? 'correct' : 'wrong');
+  inp.disabled = true;
+  document.getElementById('fill-submit').disabled = true;
+  processAnswer(correct, q, val);
+}
+
+function processAnswer(correct, q, given) {
+  sess.results.push({ q, correct, given });
+  const mp = S.modProgress[q.moduleId] || { correct: 0, total: 0 };
+  mp.total++;
+  if (correct) {
+    mp.correct++;
+    sess.score++;
+    sess.streak++;
+    const bonus = Math.min(sess.streak - 1, 5) * 10;
+    S.xp += 100 + bonus;
+    showFeedback(true, q.e, sess.streak > 2 ? `🔥 ${sess.streak} streak! +${100+bonus} XP` : `+${100+bonus} XP`, q.page);
+    celebrate();
+    playSound('correct');
+    setMascotState('happy', sess.streak > 2 ? '🔥 Streak!' : '✓ Bravo!');
+  } else {
+    sess.lives--;
+    sess.streak = 0;
+    sess.wrongModules[q.moduleId] = (sess.wrongModules[q.moduleId] || 0) + 1;
+    // Track mistake persistently
+    const ml = S.mistakeLog[q.moduleId] || { totalWrong: 0, byType: {} };
+    ml.totalWrong = (ml.totalWrong || 0) + 1;
+    ml.byType[q.type] = (ml.byType[q.type] || 0) + 1;
+    S.mistakeLog[q.moduleId] = ml;
+    // Store for booster session
+    sess.wrongQs.push({...q});
+    showFeedback(false, q.e, `Răspuns corect: ${q.a}`, q.page);
+    document.getElementById('question-area').classList.add('shake');
+    setTimeout(() => document.getElementById('question-area')?.classList.remove('shake'), 400);
+    playSound('wrong');
+    setMascotState('sad', 'Nu-i bai...');
+  }
+  S.modProgress[q.moduleId] = mp;
+  saveS();
+  updateHomeStats();
+  if (sess.lives <= 0) {
+    document.getElementById('fb-continue').textContent = 'Sfârșitul sesiunii';
+    document.getElementById('fb-continue').onclick = endSession;
+  }
+}
+
+let autoAdvanceTimer = null;
+
+function showFeedback(correct, explanation, extra, page) {
+  if (autoAdvanceTimer) { clearTimeout(autoAdvanceTimer); autoAdvanceTimer = null; }
+  const bar = document.getElementById('feedback-bar');
+  bar.className = 'feedback active ' + (correct ? 'correct' : 'wrong');
+  document.getElementById('fb-icon').textContent = correct ? '✓' : '✗';
+  document.getElementById('fb-title').textContent = correct ? (extra || 'Corect!') : 'Greșit';
+  document.getElementById('fb-title').className = 'feedback-title ' + (correct ? 'correct' : 'wrong');
+  const expEl = document.getElementById('fb-exp');
+  if (!correct && extra) {
+    const pageHint = page ? ` <span class="page-ref">· 📖 Caiet p.${page}</span>` : '';
+    expEl.innerHTML = `<strong style="color:var(--text)">${extra}</strong>${explanation ? ' &nbsp;·&nbsp; ' + explanation : ''}${pageHint}`;
+  } else {
+    expEl.textContent = explanation || '';
+  }
+  // Add auto-advance timer bar
+  const existingTimer = bar.querySelector('.feedback-timer');
+  if (existingTimer) existingTimer.remove();
+  const timerBar = document.createElement('div');
+  timerBar.className = 'feedback-timer';
+  bar.style.position = 'fixed'; // ensure relative positioning for timer
+  bar.appendChild(timerBar);
+
+  const contBtn = document.getElementById('fb-continue');
+  contBtn.textContent = sess.idx + 1 >= sess.questions.length ? 'Vezi rezultatele' : '▶';
+  contBtn.onclick = () => { if (autoAdvanceTimer) clearTimeout(autoAdvanceTimer); continueSession(); };
+
+  // Auto-advance after 3 seconds
+  const delay = correct ? 2200 : 3500;
+  timerBar.style.animationDuration = delay + 'ms';
+  autoAdvanceTimer = setTimeout(() => { autoAdvanceTimer = null; continueSession(); }, delay);
+}
+
+function hideFeedback() {
+  if (autoAdvanceTimer) { clearTimeout(autoAdvanceTimer); autoAdvanceTimer = null; }
+  document.getElementById('feedback-bar').className = 'feedback';
+}
+
+function continueSession() {
+  if (autoAdvanceTimer) { clearTimeout(autoAdvanceTimer); autoAdvanceTimer = null; }
+  if (!sess) return;
+  if (sess.lives <= 0) { endSession(); return; }
+  sess.idx++;
+  if (sess.idx >= sess.questions.length) { endSession(); return; }
+  renderQuestion();
+}
+
+function quitSession() {
+  if (autoAdvanceTimer) { clearTimeout(autoAdvanceTimer); autoAdvanceTimer = null; }
+  if (confirm('Ieși din sesiune? Progresul va fi salvat.')) endSession();
+}
+
+function endSession() {
+  if (autoAdvanceTimer) { clearTimeout(autoAdvanceTimer); autoAdvanceTimer = null; }
+  if (timerInterval) clearInterval(timerInterval);
+  if (!sess) { showScreen('home'); return; }
+  const elapsed = Math.floor((Date.now() - sess.startTime) / 1000);
+  const m = Math.floor(elapsed / 60), s = elapsed % 60;
+  const total = sess.results.length;
+  const correct = sess.score;
+  const pct = total > 0 ? Math.round((correct / total) * 100) : 0;
+  const xpEarned = correct * 100;
+  const wrongQs = sess.wrongQs || [];
+
+  document.getElementById('res-correct').textContent = correct;
+  document.getElementById('res-total').textContent = total;
+  document.getElementById('res-xp').textContent = `+${xpEarned}`;
+  document.getElementById('res-time').textContent = `${m}:${s.toString().padStart(2,'0')}`;
+  document.getElementById('res-pct').textContent = `${pct}%`;
+
+  const msgs = [
+    pct >= 90 ? ['🏆','Excelent!','Ai rezolvat perfect! Româna ta e pe foc!'] :
+    pct >= 70 ? ['🎉','Bine făcut!','Sesiune excelentă! Continuă tot așa.'] :
+    pct >= 50 ? ['💪','Efort bun!','Ești pe drumul cel bun. Mai practică!'] :
+    ['📚','Continuă!','Fiecare sesiune te face mai bun. Nu renunța!']
+  ][0];
+  document.getElementById('res-emoji').textContent = msgs[0];
+  document.getElementById('res-title').textContent = msgs[1];
+  document.getElementById('res-msg').textContent = msgs[2];
+
+  // Weak areas with mistake analysis
+  const weakAreas = document.getElementById('weak-areas');
+  const weakMods = Object.entries(sess.wrongModules).sort((a,b) => b[1]-a[1]).slice(0,3);
+  if (weakMods.length > 0) {
+    weakAreas.innerHTML = '<h3>Arii de îmbunătățit</h3>';
+    weakMods.forEach(([id, wrongs]) => {
+      const mod = MODULES.find(m => m.id === id);
+      if (mod) {
+        const ml = S.mistakeLog[id] || {};
+        const bt = ml.byType || {};
+        const typeInfo = Object.entries(bt).map(([t,n]) =>
+          `${n} ${t === 'mc' ? 'alegere' : t === 'fill' ? 'completare' : 'ordine'}`
+        ).join(', ');
+        weakAreas.innerHTML += `<div class="weak-area-item"><div class="weak-dot"></div><div>${mod.icon} ${mod.name} — ${wrongs} greșeal${wrongs>1?'i':'ă'}${typeInfo ? `<div class="mistake-type-info">Cumulativ: ${typeInfo}</div>` : ''}</div></div>`;
+      }
+    });
+  } else {
+    weakAreas.innerHTML = '';
+  }
+
+  // Incorrect answers summary
+  const wrongSummary = document.getElementById('wrong-summary');
+  const wrongResults = sess.results.filter(r => !r.correct);
+  if (wrongResults.length > 0) {
+    let whtml = '<h3>❌ Răspunsuri greșite</h3>';
+    wrongResults.forEach(r => {
+      const pageRef = r.q.page ? `<div class="wrong-page">📖 Caiet pagina ${r.q.page}</div>` : '';
+      whtml += `<div class="wrong-item">
+        <div class="wrong-q">${r.q.q}</div>
+        <div class="wrong-ans">Răspunsul tău: ${r.given || '—'}</div>
+        <div class="wrong-correct">✓ Corect: ${r.q.a}</div>
+        ${pageRef}
+      </div>`;
+    });
+    wrongSummary.innerHTML = whtml;
+  } else {
+    wrongSummary.innerHTML = '';
+  }
+
+  // Practice booster
+  const boosterArea = document.getElementById('booster-area');
+  if (wrongQs.length > 0) {
+    window._boosterQs = wrongQs;
+    boosterArea.innerHTML = `<div class="booster-section">
+      <div class="booster-title">🎯 Antrenament Țintit</div>
+      <div class="booster-detail">Ai greșit ${wrongQs.length} întrebăr${wrongQs.length > 1 ? 'i' : 'e'}. Reexersează-le!</div>
+      <button class="btn-booster" onclick="startBoosterSession()">🔁 Reexersează greșelile</button>
+    </div>`;
+  } else {
+    boosterArea.innerHTML = '';
+    window._boosterQs = [];
+  }
+
+  sess = null;
+  document.getElementById('mascot').classList.remove('visible');
+  playSound('complete');
+  showScreen('results');
+  updateHomeStats();
+}
+
+// =====================================================================
+// BOOSTER SESSION
+// =====================================================================
+function startBoosterSession() {
+  const wrongQs = window._boosterQs || [];
+  if (wrongQs.length === 0) { startSession(); return; }
+  let pool = [...wrongQs];
+  // Supplement with similar questions from weak modules
+  if (pool.length < 5) {
+    const weakIds = [...new Set(wrongQs.map(q => q.moduleId))];
+    MODULES.forEach(m => {
+      if (weakIds.includes(m.id)) {
+        const extras = m.exercises
+          .filter(e => !pool.some(p => p.q === e.q))
+          .map(e => ({...e, moduleId: m.id, moduleName: m.name}));
+        pool = [...pool, ...extras.slice(0, 3)];
+      }
+    });
+  }
+  // Shuffle
+  for (let i = pool.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+    [pool[i], pool[j]] = [pool[j], pool[i]];
+  }
+  pool = pool.slice(0, Math.min(15, pool.length));
+
+  const today = new Date().toDateString();
+  if (S.lastDate !== today) {
+    const yesterday = new Date(Date.now() - 86400000).toDateString();
+    if (S.lastDate === yesterday) { S.streak++; } else { S.streak = 1; }
+    S.lastDate = today;
+    saveS();
+  }
+
+  sess = { questions: pool, idx: 0, score: 0, lives: 5, streak: 0, startTime: Date.now(), results: [], wrongModules: {}, wrongQs: [] };
+  showScreen('session');
+  startTimer();
+  randomizeMascotColors();
+  setMascotState('idle');
+  document.getElementById('mascot').classList.add('visible');
+  renderQuestion();
+}
+
+// =====================================================================
+// HOME SCREEN
+// =====================================================================
+function renderHome() {
+  const list = document.getElementById('modules-list');
+  list.innerHTML = MODULES.map(m => {
+    const prog = modProg(m.id);
+    const pct = prog.total > 0 ? Math.round((prog.correct / prog.total) * 100) : 0;
+    const meta = prog.total > 0 ? `${pct}% accuracy · ${prog.total} done` : `${m.exercises.length} questions`;
+    return `<div class="module-row">
+      <div class="mr-icon">${m.icon}</div>
+      <div class="mr-info">
+        <div class="mr-name">${m.name}</div>
+        <div class="mr-meta">${meta}</div>
+        <div class="mr-bar"><div class="mr-bar-fill" style="width:${pct}%"></div></div>
+      </div>
+      <button class="mr-btn" onclick="startSession('${m.id}')">▶</button>
+    </div>`;
+  }).join('');
+}
+
+function updateHomeStats() {
+  document.getElementById('home-xp').textContent = S.xp.toLocaleString();
+  document.getElementById('home-streak').textContent = `🔥 ${S.streak}`;
+}
+
+function showRefreshInfo() {
+  alert(
+    'To add new notebook pages:\n\n' +
+    '1. Add your JPEG images to:\n' +
+    '   /Users/k/Documents/Romanian/ROM course/Caiet/\n\n' +
+    '2. Open Terminal and run:\n' +
+    '   cd ~/Documents/claude/"Romanian B1 trainer"\n' +
+    '   npm run refresh\n\n' +
+    '3. Reload this page to see new questions.\n\n' +
+    `Current: ${METADATA.pagesProcessed} pages processed (last updated ${METADATA.lastUpdated})`
+  );
+}
+
+// =====================================================================
+// CONFETTI
+// =====================================================================
+function celebrate() {
+  const colors = ['#c9a84c','#e8c97a','#4caf7d','#5c9ae0','#f0ebe0'];
+  for (let i = 0; i < 20; i++) {
+    setTimeout(() => {
+      const p = document.createElement('div');
+      p.className = 'confetti-particle';
+      p.style.cssText = `left:${20+Math.random()*60}%;top:20%;width:${6+Math.random()*8}px;height:${6+Math.random()*8}px;background:${colors[Math.floor(Math.random()*colors.length)]};animation-duration:${0.8+Math.random()*0.6}s;animation-delay:${Math.random()*0.3}s;`;
+      document.body.appendChild(p);
+      setTimeout(() => p.remove(), 1500);
+    }, i * 30);
+  }
+}
+
+// =====================================================================
+// SCREEN MANAGEMENT
+// =====================================================================
+function showScreen(name) {
+  document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
+  document.getElementById('screen-' + name).classList.add('active');
+  if (name === 'home') { renderHome(); updateHomeStats(); }
+}
+
+// =====================================================================
+// DIFFICULTY
+// =====================================================================
+function qDiff(q) {
+  if (q.type === 'order') return 3;
+  if (q.type === 'fill') return 2;
+  // MC difficulty by module
+  const hard = ['plurals', 'prepositions', 'expressions', 'quantity'];
+  const med  = ['verbs', 'time', 'family'];
+  if (hard.includes(q.moduleId)) return 2;
+  if (med.includes(q.moduleId))  return 1.5;
+  return 1;
+}
+
+// =====================================================================
+// MASCOT
+// =====================================================================
+let mascotTimer = null;
+
+const MASCOT_PALETTES = [
+  { body:'#e8c97a', belly:'rgba(255,255,255,0.22)', horn:'#c9a84c', feet:'#d4a830', name:'Dăco' },
+  { body:'#7ae8c9', belly:'rgba(255,255,255,0.25)', horn:'#4cc9a8', feet:'#3db89a', name:'Dăco 🌊' },
+  { body:'#e87aab', belly:'rgba(255,255,255,0.22)', horn:'#c94c7a', feet:'#b84068', name:'Dăco 🌸' },
+  { body:'#7a9ae8', belly:'rgba(255,255,255,0.25)', horn:'#4c6cc9', feet:'#3d5cb8', name:'Dăco 💎' },
+  { body:'#c97ae8', belly:'rgba(255,255,255,0.22)', horn:'#a84cc9', feet:'#9a3db8', name:'Dăco 🔮' },
+  { body:'#e8e07a', belly:'rgba(255,255,255,0.22)', horn:'#c9c04c', feet:'#b8b030', name:'Dăco ⭐' },
+  { body:'#7ae87a', belly:'rgba(255,255,255,0.22)', horn:'#4cc94c', feet:'#3db830', name:'Dăco 🌿' },
+  { body:'#e8a07a', belly:'rgba(255,255,255,0.22)', horn:'#c97a4c', feet:'#b86830', name:'Dăco 🔥' },
+];
+
+function randomizeMascotColors() {
+  const pal = MASCOT_PALETTES[Math.floor(Math.random() * MASCOT_PALETTES.length)];
+  const svg = document.getElementById('mascot-svg');
+  if (!svg) return;
+  // Body
+  svg.querySelectorAll('ellipse').forEach(el => {
+    const fill = el.getAttribute('fill');
+    if (fill === '#e8c97a' || el.__mascotBody) { el.setAttribute('fill', pal.body); el.__mascotBody = true; }
+    if (fill && fill.includes('rgba(255,255,255,0.22)') || el.__mascotBelly) { el.setAttribute('fill', pal.belly); el.__mascotBelly = true; }
+    if (fill === '#d4a830' || el.__mascotFeet) { el.setAttribute('fill', pal.feet); el.__mascotFeet = true; }
+  });
+  // Horns, wings, tail, toe lines
+  svg.querySelectorAll('path').forEach(el => {
+    const fill = el.getAttribute('fill');
+    const stroke = el.getAttribute('stroke');
+    if (fill === '#c9a84c' || el.__mascotHorn) { el.setAttribute('fill', pal.horn); el.__mascotHorn = true; }
+    if (stroke === '#c9a84c' || el.__mascotStroke) { el.setAttribute('stroke', pal.horn); el.__mascotStroke = true; }
+  });
+  // Nostrils (circles with horn color)
+  svg.querySelectorAll('circle').forEach(el => {
+    const fill = el.getAttribute('fill');
+    if (fill === '#c9a84c' || el.__mascotNostril) { el.setAttribute('fill', pal.horn); el.__mascotNostril = true; }
+  });
+  // Arms (paths with body color)
+  ['m-arm-l','m-arm-r'].forEach(id => {
+    const el = document.getElementById(id);
+    if (el) el.setAttribute('fill', pal.body);
+  });
+  // Name
+  const nameEl = document.querySelector('.mascot-name');
+  if (nameEl) nameEl.textContent = pal.name;
+  nameEl.style.color = pal.body;
+}
+
+function setMascotState(state, bubbleText) {
+  const svg = document.getElementById('mascot-svg');
+  const bubble = document.getElementById('mascot-bubble');
+  if (!svg) return;
+
+  if (mascotTimer) clearTimeout(mascotTimer);
+
+  // Mouth paths
+  const mouths = {
+    idle:  'M 39 53 Q 50 61 61 53',
+    happy: 'M 37 51 Q 50 64 63 51',
+    sad:   'M 37 56 Q 50 50 63 56'
+  };
+  const mouth = document.getElementById('m-mouth');
+  if (mouth) mouth.setAttribute('d', mouths[state] || mouths.idle);
+
+  // Pupils (look down when sad)
+  const pl = document.getElementById('m-pupil-l');
+  const pr = document.getElementById('m-pupil-r');
+  if (pl && pr) {
+    pl.setAttribute('cy', state === 'sad' ? '42' : '38');
+    pr.setAttribute('cy', state === 'sad' ? '42' : '38');
+  }
+
+  // Arms (raise for happy, droop for sad)
+  const armL = document.getElementById('m-arm-l');
+  const armR = document.getElementById('m-arm-r');
+  if (armL && armR) {
+    const arms = {
+      idle:  ['M 22 66 Q 10 72 12 83 Q 20 75 26 75 Z', 'M 78 66 Q 90 72 88 83 Q 80 75 74 75 Z'],
+      happy: ['M 14 45 Q 4 32 14 24 Q 18 38 24 40 Z',  'M 86 45 Q 96 32 86 24 Q 82 38 76 40 Z'],
+      sad:   ['M 18 70 Q 6 80 10 90 Q 20 80 26 78 Z',  'M 82 70 Q 94 80 90 90 Q 80 80 74 78 Z']
+    };
+    const pair = arms[state] || arms.idle;
+    armL.setAttribute('d', pair[0]);
+    armR.setAttribute('d', pair[1]);
+  }
+
+  // Bubble message
+  if (bubbleText && bubble) {
+    bubble.textContent = bubbleText;
+    bubble.classList.add('show');
+    setTimeout(() => bubble.classList.remove('show'), 2000);
+  }
+
+  // SVG animation
+  svg.style.animation = 'none';
+  svg.offsetHeight; // reflow
+  const anims = { idle: 'mascotFloat 3s ease-in-out infinite', happy: 'mascotJump 0.7s ease', sad: 'mascotDroop 0.5s ease forwards' };
+  svg.style.animation = anims[state] || anims.idle;
+
+  // Return to idle after happy/sad
+  if (state !== 'idle') {
+    mascotTimer = setTimeout(() => setMascotState('idle'), 2200);
+  }
+}
+
+// =====================================================================
+// SOUND
+// =====================================================================
+let soundEnabled = true;
+let audioCtx = null;
+
+function getAudioCtx() {
+  if (!audioCtx) audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+  return audioCtx;
+}
+
+function playTone(freq, type, startTime, duration, vol, ctx) {
+  const osc = ctx.createOscillator();
+  const gain = ctx.createGain();
+  osc.connect(gain);
+  gain.connect(ctx.destination);
+  osc.type = type;
+  osc.frequency.value = freq;
+  gain.gain.setValueAtTime(vol, startTime);
+  gain.gain.exponentialRampToValueAtTime(0.001, startTime + duration);
+  osc.start(startTime);
+  osc.stop(startTime + duration);
+}
+
+function playSound(type) {
+  if (!soundEnabled) return;
+  try {
+    const ctx = getAudioCtx();
+    const now = ctx.currentTime;
+    if (type === 'correct') {
+      [[523.25,0],[659.25,.1],[783.99,.2]].forEach(([f,t]) => playTone(f,'sine',now+t,.35,.22,ctx));
+    } else if (type === 'wrong') {
+      playTone(200,'sawtooth',now,.15,.18,ctx);
+      playTone(160,'sawtooth',now+.15,.25,.15,ctx);
+    } else if (type === 'complete') {
+      [[523.25,0],[659.25,.12],[783.99,.24],[1046.5,.38]].forEach(([f,t]) => playTone(f,'sine',now+t,.45,.2,ctx));
+    } else if (type === 'click') {
+      playTone(880,'sine',now,.08,.1,ctx);
+    }
+  } catch(e) {}
+}
+
+function toggleSound() {
+  soundEnabled = !soundEnabled;
+  document.getElementById('sound-btn').textContent = soundEnabled ? '🔊' : '🔇';
+}
+
+// =====================================================================
+// INIT
+// =====================================================================
+loadS();
+renderHome();
+updateHomeStats();
+
+document.addEventListener('keydown', function(e) {
+  if (e.key !== 'Enter') return;
+  // Don't intercept Enter while typing in the fill input
+  if (document.activeElement && document.activeElement.id === 'fill-inp') return;
+  const fb = document.getElementById('feedback-bar');
+  if (fb && fb.classList.contains('active')) {
+    e.preventDefault();
+    document.getElementById('fb-continue').click();
+  }
+});
+</script>
+</body>
+</html>
