@@ -297,6 +297,12 @@ body{background:var(--bg);color:var(--text);font-family:'DM Sans',sans-serif;min
 @keyframes glowPulse{0%,100%{box-shadow:0 0 0 rgba(201,168,76,0)}50%{box-shadow:0 0 30px rgba(201,168,76,.08)}}
 .question-area{animation:glowPulse 4s ease-in-out infinite;}
 
+/* Language toggle */
+.lang-toggle{display:flex;background:var(--surface);border:1px solid var(--border);border-radius:99px;overflow:hidden;}
+.lang-btn{padding:4px 10px;border:none;background:none;color:var(--muted);font-size:.72rem;cursor:pointer;font-family:'DM Sans',sans-serif;transition:all .15s;line-height:1.4;}
+.lang-btn.active{background:var(--gold);color:#0d0d0d;font-weight:600;}
+.lang-btn:hover:not(.active){color:var(--text);}
+
 /* ===================== RESPONSIVE ===================== */
 @media(max-width:700px){
   .home-layout{flex-direction:column-reverse;}
@@ -318,9 +324,13 @@ body{background:var(--bg);color:var(--text);font-family:'DM Sans',sans-serif;min
   <header>
     <div class="logo">Română B1 <span>Caiet Trainer</span></div>
     <div class="header-right">
+      <div class="lang-toggle" id="lang-toggle">
+        <button class="lang-btn active" data-lang="en" onclick="setLang('en')">EN 🇬🇧</button>
+        <button class="lang-btn" data-lang="ru" onclick="setLang('ru')">RU 🇷🇺</button>
+      </div>
       <div class="hstat"><div class="hstat-val" id="home-xp">0</div><div class="hstat-lbl">XP</div></div>
       <div class="hstat"><div class="hstat-val" id="home-streak">🔥 0</div><div class="hstat-lbl">Streak</div></div>
-      <button class="refresh-btn" onclick="showRefreshInfo()">+ Add Pages</button>
+      <button class="refresh-btn" onclick="showRefreshInfo()">+ Adaugă pagini</button>
     </div>
   </header>
   <div class="home-layout">
@@ -333,7 +343,7 @@ body{background:var(--bg);color:var(--text);font-family:'DM Sans',sans-serif;min
       <p class="session-hint">20 de întrebări aleatoare din toate modulele · ~90 sec fiecare</p>
     </div>
     <div class="home-sidebar">
-      <div class="sidebar-hdr">Modules</div>
+      <div class="sidebar-hdr">Module</div>
       <div id="modules-list"></div>
     </div>
   </div>
@@ -344,13 +354,13 @@ body{background:var(--bg);color:var(--text);font-family:'DM Sans',sans-serif;min
   <div class="session-header">
     <div class="sess-progress">
       <div class="sess-progress-bar"><div class="sess-progress-fill" id="sess-prog-fill" style="width:0%"></div></div>
-      <div class="sess-counter" id="sess-counter">Question 1 of 20</div>
+      <div class="sess-counter" id="sess-counter">Întrebarea 1 din 20</div>
     </div>
     <div class="sess-lives" id="sess-lives">💙💙💙</div>
     <div class="sess-streak" id="sess-streak">🔥 0</div>
     <div class="sess-timer" id="sess-timer">0:00</div>
     <button class="sound-btn" id="sound-btn" onclick="toggleSound()" title="Toggle sound">🔊</button>
-    <button class="quit-btn" onclick="quitSession()">✕ Quit</button>
+    <button class="quit-btn" onclick="quitSession()">✕ Ieși</button>
   </div>
   <div class="question-area" id="question-area">
     <!-- filled by JS -->
@@ -412,10 +422,10 @@ body{background:var(--bg);color:var(--text);font-family:'DM Sans',sans-serif;min
   <div class="feedback" id="feedback-bar">
     <div class="feedback-icon" id="fb-icon">✓</div>
     <div class="feedback-body">
-      <div class="feedback-title" id="fb-title">Correct!</div>
+      <div class="feedback-title" id="fb-title">Corect!</div>
       <div class="feedback-exp" id="fb-exp"></div>
     </div>
-    <button class="continue-btn" id="fb-continue" onclick="continueSession()">Continue</button>
+    <button class="continue-btn" id="fb-continue" onclick="continueSession()">▶</button>
   </div>
 </div>
 
@@ -656,7 +666,7 @@ const MODULES = [
 // STATE MANAGEMENT
 // =====================================================================
 const STORAGE_KEY = 'ro_caiet_v1';
-let S = { xp: 0, streak: 0, lastDate: null, modProgress: {}, mistakeLog: {} };
+let S = { xp: 0, streak: 0, lastDate: null, modProgress: {}, mistakeLog: {}, lang: 'en' };
 
 function loadS() {
   try { const d = JSON.parse(localStorage.getItem(STORAGE_KEY)); if(d) S = {...S, ...d}; }
@@ -667,6 +677,165 @@ function saveS() {
 }
 function modProg(id) {
   return S.modProgress[id] || { correct: 0, total: 0 };
+}
+
+// =====================================================================
+// LANGUAGE SYSTEM (EN ↔ RU helper language)
+// =====================================================================
+const EN_RU = {
+  // a_fi
+  'They (fem.) are not':'Они (ж.р.) — нет','She is not':'Она — нет',
+  'We are not':'Мы — нет','You (pl.) are not':'Вы — нет',
+  // family
+  'My daughter':'Моя дочь','My son':'Мой сын','My niece':'Моя племянница','My granddaughter':'Моя внучка',
+  // time
+  'Every Saturday':'Каждую субботу','Last Saturday':'В прошлую субботу',
+  'Next Saturday':'В следующую субботу','This Saturday':'В эту субботу',
+  'Autumn/Fall':'Осень','Summer':'Лето','Spring':'Весна','Winter':'Зима',
+  'At what time?':'Во сколько?','What time is it?':'Который час?',
+  'How much time?':'Сколько времени?','Since when?':'С каких пор?',
+  'Every morning':'Каждое утро','In the morning':'Утром',
+  'Good morning':'Доброе утро','Early':'Рано',
+  // vocabulary
+  'Blood':'Кровь','Heart':'Сердце','Vein':'Вена','Pulse':'Пульс',
+  'Neck AND throat':'Шея И горло','Only neck':'Только шея',
+  'Only throat':'Только горло','Shoulder':'Плечо',
+  'Neighbour':'Сосед','Friend':'Друг','Colleague':'Коллега','Relative':'Родственник',
+  'Kitchen vs Dining room':'Кухня vs Столовая',
+  'Dining room vs Kitchen':'Столовая vs Кухня',
+  'Both = kitchen':'Оба = кухня','Kitchen vs Bathroom':'Кухня vs Ванная',
+  'Ghiozdan = backpack, Geantă = bag':'Ghiozdan = рюкзак, Geantă = сумка',
+  'Ghiozdan = bag, Geantă = backpack':'Ghiozdan = сумка, Geantă = рюкзак',
+  'Ghiozdan = wallet':'Ghiozdan = кошелёк',
+  'Șosete (socks)':'Șosete (носки)','Ghete (boots)':'Ghete (ботинки)',
+  'Pantofi (shoes)':'Pantofi (туфли)','Mănuși (gloves)':'Mănuși (перчатки)',
+  // expressions
+  "You're right!":'Ты прав!',"You have rights!":'У тебя есть права!',
+  "You're left!":'Ты ушёл!',"It's correct!":'Это правильно!',
+  'I need help.':'Мне нужна помощь.','I have help.':'У меня есть помощь.',
+  'I want help.':'Я хочу помощь.','I give help.':'Я даю помощь.',
+  "You're not allowed to smoke here!":'Тебе нельзя курить здесь!',
+  "You don't want to smoke!":'Ты не хочешь курить!',
+  "Please don't smoke!":'Пожалуйста, не кури!',
+  "Smoking is bad!":'Курение — это плохо!',
+  'Because':'Потому что','Therefore':'Поэтому','Although':'Хотя','However':'Однако',
+  "Good luck with your work!":'Удачи в работе!',
+  "Enjoy your meal!":'Приятного аппетита!',"Have a good trip!":'Хорошей поездки!',
+  // quantity
+  'A bag':'Пакет','A box':'Коробка','A can':'Банка (жест.)','A jar':'Банка (стекл.)',
+  'A pack/packet':'Пачка',
+};
+
+// Word/phrase-level replacements for explanation text (sorted longest-first)
+const EN_RU_PHRASES = [
+  ['blood donation','донорство крови'],['washing machine','стиральная машина'],
+  ['day after tomorrow','послезавтра'],['Nice to meet you','Приятно познакомиться'],
+  ['What is your name','Как тебя зовут'],['I cannot wait','Не могу дождаться'],
+  ['Do not worry','Не волнуйтесь'],['I am fine','Я в порядке'],
+  ['I am glad','Я рад'],['to be right','быть правым'],
+  ['to be allowed','иметь разрешение'],['to take care of','заботиться о'],
+  ['Be careful','Будь осторожен'],['not anymore','больше не'],
+  ['quarter past','четверть после'],['half past','половина'],
+  ['to feel like','хотеть'],['boiled eggs','варёные яйца'],
+  ['dining room','столовая'],['school bag','школьный ранец'],
+  ['male cousin','двоюродный брат'],["that's why",'поэтому'],
+  ["You're wrong",'Ты не прав'],['is located','находится'],
+  ['Where is','Где находится'],['Do you want to','Ты хочешь'],
+  ['Do you need anything','Тебе что-нибудь нужно'],['not allowed','нельзя'],
+  ['to seem','казаться'],['to have','иметь'],['to be','быть'],['to need','нуждаться'],
+  ['to sing','петь'],['to go','идти'],['to stay','оставаться'],['to want','хотеть'],
+  ['to buy','покупать'],['to do','делать'],['to eat','есть'],['to drink','пить'],
+  ['to live','жить'],
+  ['you go','ты идёшь'],['you are','ты / вы'],['you want','ты хочешь'],
+  ['you drink','ты пьёшь'],['they are','они'],['they go','они идут'],
+  ['they have','они имеют'],['they want','они хотят'],['we are','мы'],
+  ['she is not','она не'],['he stays','он остаётся'],['he is not','он не'],
+  ['she is','она'],['he is','он'],
+  ['I stay','я остаюсь'],['I want','я хочу'],['I wait','я жду'],
+  ['I kiss you','целую тебя'],
+  ['blood','кровь'],['heart','сердце'],['finger','палец'],['throat','горло'],
+  ['neck','шея'],['snow','снег'],['ice','лёд'],['forest','лес'],['garden','сад'],
+  ['yard','двор'],['field','поле'],['sun','солнце'],['stars','звёзды'],['shines','сияет'],
+  ['backpack','рюкзак'],['bag','сумка'],['purse','кошелёк'],['wallet','бумажник'],
+  ['mirror','зеркало'],['socks','носки'],['boots','ботинки'],['shoes','туфли'],
+  ['gloves','перчатки'],['pillow','подушка'],['blanket','одеяло'],['sheet','простыня'],
+  ['mattress','матрас'],['nightstand','тумбочка'],['wardrobe','шкаф'],['shelf','полка'],
+  ['kitchen','кухня'],['bedroom','спальня'],['dishwasher','посудомойка'],
+  ['neighbour','сосед'],['neighbours','соседи'],['song','песня'],['music','музыка'],
+  ['slice','ломтик'],['piece','кусок'],['jar','банка'],['carton','пакет'],
+  ['bottle','бутылка'],['box','коробка'],['pack','пачка'],['packet','пачка'],
+  ['winter','зима'],['spring','весна'],['summer','лето'],['autumn','осень'],
+  ['Saturday','суббота'],['Sunday','воскресенье'],['Monday','понедельник'],
+  ['happy','счастливый'],['upset','расстроенный'],['sad','грустный'],
+  ['husband','муж'],['wife','жена'],['daughter','дочь'],['son','сын'],
+  ['grandmother','бабушка'],['grandfather','дедушка'],['nephew','племянник'],
+  ['grandson','внук'],['roommates','соседи по комнате'],['room','комната'],
+  ['firefighter','пожарный'],['barber','парикмахер'],['chef','повар'],
+  ['tomorrow','завтра'],['home','дом'],['toothbrush','зубная щётка'],
+  ['toothpaste','зубная паста'],['progress','прогресс'],
+  ['unfortunately','к сожалению'],['fortunately','к счастью'],
+  ['barely','едва'],['hardly','едва'],['enough','достаточно'],['quite','довольно'],
+  ['because','потому что'],['only','только'],['however','однако'],
+  ['although','хотя'],['therefore','поэтому'],
+].sort((a, b) => b[0].length - a[0].length);
+
+function getLang() { return S.lang || 'en'; }
+
+function setLang(lang) {
+  S.lang = lang; saveS();
+  document.querySelectorAll('.lang-btn').forEach(b => {
+    b.classList.toggle('active', b.dataset.lang === lang);
+  });
+  if (sess) renderQuestion();
+  else renderHome();
+}
+
+function _trReplace(text) {
+  let r = text;
+  for (const [en, ru] of EN_RU_PHRASES) {
+    const isMultiWord = en.includes(' ') || en.includes("'");
+    if (isMultiWord) {
+      if (r.includes(en)) r = r.split(en).join(ru);
+      const cap = en.charAt(0).toUpperCase() + en.slice(1);
+      const capRu = ru.charAt(0).toUpperCase() + ru.slice(1);
+      if (r.includes(cap)) r = r.split(cap).join(capRu);
+    } else {
+      try {
+        const esc = en.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+        r = r.replace(new RegExp('\\b' + esc + '\\b', 'g'), ru);
+        const cap = en.charAt(0).toUpperCase() + en.slice(1);
+        const capRu = ru.charAt(0).toUpperCase() + ru.slice(1);
+        const escCap = cap.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+        r = r.replace(new RegExp('\\b' + escCap + '\\b', 'g'), capRu);
+      } catch(e) {}
+    }
+  }
+  return r;
+}
+
+function trOpt(text) {
+  if (getLang() !== 'ru') return text;
+  if (EN_RU[text]) return EN_RU[text];
+  let r = text.replace(/\(([^)]+)\)/g, (m, inner) => {
+    if (EN_RU[inner]) return '(' + EN_RU[inner] + ')';
+    const cap = inner.charAt(0).toUpperCase() + inner.slice(1);
+    if (EN_RU[cap]) return '(' + EN_RU[cap] + ')';
+    const t = _trReplace(inner);
+    return t !== inner ? '(' + t + ')' : m;
+  });
+  if (r !== text) return r;
+  return _trReplace(text);
+}
+
+function trExp(text) {
+  if (getLang() !== 'ru') return text;
+  return _trReplace(text);
+}
+
+function trAns(text) {
+  if (getLang() !== 'ru') return text;
+  if (EN_RU[text]) return EN_RU[text];
+  return _trReplace(text);
 }
 
 // =====================================================================
@@ -746,13 +915,13 @@ function renderQuestion() {
     html += `<div class="mc-options">`;
     const shuffled = shuffleArr([...q.opts]);
     shuffled.forEach((opt, i) => {
-      html += `<button class="mc-opt" onclick="checkMC(this)" data-val="${escHtml(opt)}">${opt}</button>`;
+      html += `<button class="mc-opt" onclick="checkMC(this)" data-val="${escHtml(opt)}">${trOpt(opt)}</button>`;
     });
     html += `</div>`;
   } else if (q.type === 'fill') {
     html += `<div class="fill-wrap">
-      <input class="fill-input" id="fill-inp" type="text" placeholder="Type your answer..." autocomplete="off" spellcheck="false" onkeydown="if(event.key==='Enter'){submitFill();event.stopPropagation();}">
-      <button class="submit-btn" id="fill-submit" onclick="submitFill()">Check Answer</button>
+      <input class="fill-input" id="fill-inp" type="text" placeholder="Scrie răspunsul..." autocomplete="off" spellcheck="false" onkeydown="if(event.key==='Enter'){submitFill();event.stopPropagation();}">
+      <button class="submit-btn" id="fill-submit" onclick="submitFill()">Verifică</button>
     </div>`;
   } else if (q.type === 'order') {
     const shuffledWords = shuffleArr([...q.words]);
@@ -763,7 +932,7 @@ function renderQuestion() {
       html += `<button class="word-chip" id="wc-${i}" onclick="addWordToSlot(this,'${escHtml(w)}')">${w}</button>`;
     });
     html += `</div>
-      <button class="submit-btn" onclick="submitOrder()">Check Order</button>
+      <button class="submit-btn" onclick="submitOrder()">Verifică ordinea</button>
     </div>`;
   }
 
@@ -853,7 +1022,7 @@ function processAnswer(correct, q, given) {
     sess.streak++;
     const bonus = Math.min(sess.streak - 1, 5) * 10;
     S.xp += 100 + bonus;
-    showFeedback(true, q.e, sess.streak > 2 ? `🔥 ${sess.streak} streak! +${100+bonus} XP` : `+${100+bonus} XP`, q.page);
+    showFeedback(true, trExp(q.e), sess.streak > 2 ? `🔥 ${sess.streak} streak! +${100+bonus} XP` : `+${100+bonus} XP`, q.page);
     celebrate();
     playSound('correct');
     setMascotState('happy', sess.streak > 2 ? '🔥 Streak!' : '✓ Bravo!');
@@ -868,7 +1037,7 @@ function processAnswer(correct, q, given) {
     S.mistakeLog[q.moduleId] = ml;
     // Store for booster session
     sess.wrongQs.push({...q});
-    showFeedback(false, q.e, `Răspuns corect: ${q.a}`, q.page);
+    showFeedback(false, trExp(q.e), `Răspuns corect: ${trAns(q.a)}`, q.page);
     document.getElementById('question-area').classList.add('shake');
     setTimeout(() => document.getElementById('question-area')?.classList.remove('shake'), 400);
     playSound('wrong');
@@ -993,8 +1162,8 @@ function endSession() {
       const pageRef = r.q.page ? `<div class="wrong-page">📖 Caiet pagina ${r.q.page}</div>` : '';
       whtml += `<div class="wrong-item">
         <div class="wrong-q">${r.q.q}</div>
-        <div class="wrong-ans">Răspunsul tău: ${r.given || '—'}</div>
-        <div class="wrong-correct">✓ Corect: ${r.q.a}</div>
+        <div class="wrong-ans">Răspunsul tău: ${r.given ? trOpt(r.given) : '—'}</div>
+        <div class="wrong-correct">✓ Corect: ${trAns(r.q.a)}</div>
         ${pageRef}
       </div>`;
     });
@@ -1075,7 +1244,7 @@ function renderHome() {
   list.innerHTML = MODULES.map(m => {
     const prog = modProg(m.id);
     const pct = prog.total > 0 ? Math.round((prog.correct / prog.total) * 100) : 0;
-    const meta = prog.total > 0 ? `${pct}% accuracy · ${prog.total} done` : `${m.exercises.length} questions`;
+    const meta = prog.total > 0 ? `${pct}% corect · ${prog.total} făcute` : `${m.exercises.length} întrebări`;
     return `<div class="module-row">
       <div class="mr-icon">${m.icon}</div>
       <div class="mr-info">
@@ -1095,14 +1264,14 @@ function updateHomeStats() {
 
 function showRefreshInfo() {
   alert(
-    'To add new notebook pages:\n\n' +
-    '1. Add your JPEG images to:\n' +
+    'Pentru a adăuga pagini noi:\n\n' +
+    '1. Adaugă imaginile JPEG în:\n' +
     '   /Users/k/Documents/Romanian/ROM course/Caiet/\n\n' +
-    '2. Open Terminal and run:\n' +
+    '2. Deschide Terminal și rulează:\n' +
     '   cd ~/Documents/claude/"Romanian B1 trainer"\n' +
     '   npm run refresh\n\n' +
-    '3. Reload this page to see new questions.\n\n' +
-    `Current: ${METADATA.pagesProcessed} pages processed (last updated ${METADATA.lastUpdated})`
+    '3. Reîncarcă pagina pentru a vedea întrebările noi.\n\n' +
+    `Curent: ${METADATA.pagesProcessed} pagini procesate (ultima actualizare ${METADATA.lastUpdated})`
   );
 }
 
@@ -1303,6 +1472,10 @@ function toggleSound() {
 // INIT
 // =====================================================================
 loadS();
+// Apply saved language preference
+document.querySelectorAll('.lang-btn').forEach(b => {
+  b.classList.toggle('active', b.dataset.lang === getLang());
+});
 renderHome();
 updateHomeStats();
 
