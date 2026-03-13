@@ -909,6 +909,24 @@ const EN_RU_PHRASES = [
   ['barely','едва'],['hardly','едва'],['enough','достаточно'],['quite','довольно'],
   ['because','потому что'],['only','только'],['however','однако'],
   ['although','хотя'],['therefore','поэтому'],
+  // food & dining (page 15)
+  ['chicken breast','куриная грудка'],['chicken legs','куриные ножки'],
+  ['whipped cream','взбитые сливки'],['ice cream','мороженое'],
+  ['french fries','картофель фри'],['noodle soup','суп с лапшой'],
+  ['plum jam','сливовое варенье'],['peach juice','персиковый сок'],
+  ['watermelon','арбуз'],['blackberry','ежевика'],['blueberry','голубика'],
+  ['raspberry','малина'],['strawberry','клубника'],['meatballs','фрикадельки'],
+  ['noodles','лапша'],['dumplings','вареники'],['sausages','сосиски'],
+  ['barbecue','барбекю'],['mushrooms','грибы'],
+  ['dinner','ужин'],['lunch','обед'],['breakfast','завтрак'],['snack','перекус'],
+  ['meal','еда'],['peach','персик'],['plum','слива'],['cherry','вишня'],
+  ['grape','виноград'],['pear','груша'],['melon','дыня'],
+  ['fried','жареный'],['grilled','на гриле'],['baked','запечённый'],
+  ['boiled','варёный'],['steamed','на пару'],['cream','сливки'],
+  ['life','жизнь'],['jewelry','ювелирные изделия'],['beauty','красота'],
+  ['treasure','сокровище'],['crystal','кристалл'],
+  ['hungry','голодный'],['thirsty','жаждущий'],['tired','усталый'],
+  ['order','заказать'],['bring','принести'],['cook','готовить'],
 ].sort((a, b) => b[0].length - a[0].length);
 
 function getLang() { return S.lang || 'en'; }
@@ -1079,80 +1097,143 @@ function renderQuestion() {
   if (q.type === 'fill') { setTimeout(() => document.getElementById('fill-inp')?.focus(), 100); }
 }
 
-// Question translation dictionary (Romanian → EN/RU)
-const Q_TRANSLATIONS_EN = {
-  // greetings
-  'Care propoziție de prezentare este GREȘITĂ?':'Which introduction sentence is WRONG?',
-  'Completați: "Îmi ___ bine să te cunosc!"':'Complete: "Îmi ___ bine să te cunosc!"',
-  'Prietena ta spune "Ciao!" Tu răspunzi informal:':'Your friend says "Ciao!" You reply informally:',
-  '"Pe tine cum te cheamă?" este echivalentul lui:':'"Pe tine cum te cheamă?" is equivalent to:',
-  'Cum spunem "I cannot wait!" în română?':'How do we say "I cannot wait!" in Romanian?',
-  'Răspuns politicos la "Îmi pare bine":':'Polite response to "Îmi pare bine":',
-  'Cum spunem "Do not worry!" la plural/formal?':'How to say "Do not worry!" in plural/formal?',
-  '"Colegi de cameră" sunt:':'"Colegi de cameră" are:',
-  'Despărțire caldă, informală:':'Warm, informal goodbye:',
-  '"Servus" este folosit în România ca:':'"Servus" is used in Romania as:',
-  'Care variantă este CORECTĂ pentru "I\'m happy to meet you"?':'Which is CORRECT for "I\'m happy to meet you"?',
-  '"Fericit" înseamnă în engleză:':'"Fericit" means in English:',
-  // a_fi
-  'Completați: "Noi ___ studenți la Universitate."':'Complete: "Noi ___ studenți la Universitate."',
-  'Negativ: "Ea nu ___ profesoară, este medic."':'Negative: "Ea nu ___ profesoară, este medic."',
-  'Care propoziție este GREȘITĂ?':'Which sentence is WRONG?',
-  '"Ei ___ colegi de cameră." — forma corectă:':'"Ei ___ colegi de cameră." — correct form:',
-  '"Dumneavoastră ___ profesor?" (politețe)':'"Dumneavoastră ___ profesor?" (polite)',
-  'Forma scurtă negativă a lui "Eu nu sunt" este:':'The short negative form of "Eu nu sunt" is:',
-  '"El nu-i acasă" este echivalentul lui:':'"El nu-i acasă" is equivalent to:',
-  '"Tu ___ obosit sau ai energie?"':'"Tu ___ tired or have energy?"',
-  'Care este forma FORMALĂ pentru "you are"?':'What is the FORMAL form for "you are"?',
-  '"Ele nu sunt" înseamnă:':'"Ele nu sunt" means:',
-  '"Sunt" apare la persoanele:':'"Sunt" appears for persons:',
-  // Common patterns
-  'Care plural este NEREGULAT?':'Which plural is IRREGULAR?',
-  'Care substantiv NU are plural?':'Which noun has NO plural?',
-};
-const Q_TRANSLATIONS_RU = {
-  'Care propoziție de prezentare este GREȘITĂ?':'Какое предложение-знакомство НЕПРАВИЛЬНОЕ?',
-  'Completați: "Îmi ___ bine să te cunosc!"':'Дополните: "Îmi ___ bine să te cunosc!"',
-  'Prietena ta spune "Ciao!" Tu răspunzi informal:':'Подруга говорит "Ciao!" Ты отвечаешь неформально:',
-  '"Pe tine cum te cheamă?" este echivalentul lui:':'"Pe tine cum te cheamă?" эквивалентно:',
-  'Cum spunem "I cannot wait!" în română?':'Как сказать "I cannot wait!" по-румынски?',
-  'Răspuns politicos la "Îmi pare bine":':'Вежливый ответ на "Îmi pare bine":',
-  'Cum spunem "Do not worry!" la plural/formal?':'Как сказать "Не волнуйтесь!" (мн.ч./формально)?',
-  '"Colegi de cameră" sunt:':'"Colegi de cameră" — это:',
-  'Despărțire caldă, informală:':'Тёплое, неформальное прощание:',
-  '"Servus" este folosit în România ca:':'"Servus" используется в Румынии как:',
-  'Care variantă este CORECTĂ pentru "I\'m happy to meet you"?':'Какой вариант ПРАВИЛЬНЫЙ для "Рад познакомиться"?',
-  '"Fericit" înseamnă în engleză:':'"Fericit" означает:',
-  'Completați: "Noi ___ studenți la Universitate."':'Дополните: "Noi ___ studenți la Universitate."',
-  'Negativ: "Ea nu ___ profesoară, este medic."':'Отрицание: "Ea nu ___ profesoară, este medic."',
-  'Care propoziție este GREȘITĂ?':'Какое предложение НЕПРАВИЛЬНОЕ?',
-  '"Ei ___ colegi de cameră." — forma corectă:':'"Ei ___ colegi de cameră." — правильная форма:',
-  '"Dumneavoastră ___ profesor?" (politețe)':'"Dumneavoastră ___ profesor?" (вежливо)',
-  'Forma scurtă negativă a lui "Eu nu sunt" este:':'Краткая отрицательная форма "Eu nu sunt":',
-  '"El nu-i acasă" este echivalentul lui:':'"El nu-i acasă" эквивалентно:',
-  '"Tu ___ obosit sau ai energie?"':'"Tu ___ устал или есть энергия?"',
-  'Care este forma FORMALĂ pentru "you are"?':'Какая ФОРМАЛЬНАЯ форма для "you are"?',
-  '"Ele nu sunt" înseamnă:':'"Ele nu sunt" означает:',
-  '"Sunt" apare la persoanele:':'"Sunt" встречается у лиц:',
-  'Care plural este NEREGULAT?':'Какое множественное число НЕПРАВИЛЬНОЕ?',
-  'Care substantiv NU are plural?':'Какое существительное НЕ имеет мн.ч.?',
-};
-
+// Pattern-based question translator (Romanian → EN/RU)
 function translateQuestion(qText) {
   const lang = getLang();
-  const dict = lang === 'ru' ? Q_TRANSLATIONS_RU : Q_TRANSLATIONS_EN;
-  // Try exact match first
-  if (dict[qText]) return dict[qText];
-  // Fallback: use _trReplace for RU, or build a basic EN translation
-  if (lang === 'ru') return _trReplace(qText);
-  // For EN: translate common Romanian question patterns
   let t = qText;
-  t = t.replace(/Care /g,'Which ').replace(/Completați/g,'Complete')
-    .replace(/Cum spunem/g,'How do we say').replace(/înseamnă/g,'means')
-    .replace(/Pluralul lui/g,'Plural of').replace(/forma corectă/g,'correct form')
-    .replace(/este echivalentul lui/g,'is equivalent to')
-    .replace(/ vs /g,' vs ').replace(/care este/gi,'which is')
-    .replace(/este GREȘIT/g,'is WRONG').replace(/este CORECT/g,'is CORRECT');
+
+  if (lang === 'ru') {
+    // ---- ROMANIAN → RUSSIAN structural patterns (longest first) ----
+    // Multi-word phrases
+    t = t.replace(/Care propoziție de prezentare este GREȘITĂ\?/g, 'Какое предложение-представление НЕПРАВИЛЬНОЕ?');
+    t = t.replace(/Care propoziție este GREȘITĂ\?/g, 'Какое предложение НЕПРАВИЛЬНОЕ?');
+    t = t.replace(/Care propoziție folosește CORECT/g, 'Какое предложение ПРАВИЛЬНО использует');
+    t = t.replace(/Care variantă este CORECTĂ/g, 'Какой вариант ПРАВИЛЬНЫЙ');
+    t = t.replace(/Care folosire a lui (.*?) este CORECTĂ\?/g, 'Какое использование $1 ПРАВИЛЬНОЕ?');
+    t = t.replace(/Care plural masculin este GREȘIT\?/g, 'Какое мн.ч. муж.р. НЕПРАВИЛЬНОЕ?');
+    t = t.replace(/Care plural este NEREGULAT\?/g, 'Какое мн.ч. НЕПРАВИЛЬНОЕ?');
+    t = t.replace(/Care plural este GREȘIT\?/g, 'Какое мн.ч. НЕПРАВИЛЬНОЕ?');
+    t = t.replace(/Care substantiv NU are plural\?/g, 'Какое существительное НЕ имеет мн.ч.?');
+    t = t.replace(/Care NU este un fruct\?/g, 'Что НЕ является фруктом?');
+    t = t.replace(/Cum spunem (.*?) în română\?/g, 'Как сказать $1 по-румынски?');
+    t = t.replace(/Cum spunem (.*?) la plural\/formal\?/g, 'Как сказать $1 (мн.ч./формально)?');
+    t = t.replace(/Regula generală pluralul masculin/g, 'Общее правило мн.ч. муж.р.');
+    t = t.replace(/Regula pentru feminin/g, 'Правило для жен.р.');
+    t = t.replace(/Forma scurtă negativă a lui/g, 'Краткая отрицательная форма');
+    t = t.replace(/Excepție la masculine:/g, 'Исключение для муж.р.:');
+    t = t.replace(/Excepție la neutre:/g, 'Исключение для ср.р.:');
+    t = t.replace(/Femininele și neutrele au aceleași terminații la:/g, 'Жен. и ср.р. имеют одинаковые окончания в:');
+    t = t.replace(/Cel mai neregulat plural:/g, 'Самое нерегулярное мн.ч.:');
+    t = t.replace(/Pluralul NEREGULAT al lui/g, 'НЕПРАВИЛЬНОЕ мн.ч.');
+    t = t.replace(/Pluralul lui/g, 'Мн. число');
+    t = t.replace(/Primul anotimp al anului:/g, 'Первое время года:');
+    t = t.replace(/Prima masă a zilei:/g, 'Первый приём пищи дня:');
+    t = t.replace(/Prietena ta spune/g, 'Подруга говорит');
+    t = t.replace(/Tu răspunzi informal:/g, 'Ты отвечаешь неформально:');
+    t = t.replace(/Răspuns politicos la/g, 'Вежливый ответ на');
+    t = t.replace(/Despărțire caldă, informală:/g, 'Тёплое, неформальное прощание:');
+    t = t.replace(/Zilele de weekend:/g, 'Выходные дни:');
+    t = t.replace(/Luna a (\d+)-a a anului este:/g, '$1-й месяц года:');
+    t = t.replace(/Care zi vine DUPĂ/g, 'Какой день идёт ПОСЛЕ');
+    t = t.replace(/Care lună vine ÎNAINTE de/g, 'Какой месяц идёт ПЕРЕД');
+    t = t.replace(/Verbele (.*?) urmează modelul:/g, 'Глаголы $1 следуют модели:');
+    // Generic structural patterns
+    t = t.replace(/ — care e /g, ' — что из них ');
+    t = t.replace(/ — care este /g, ' — что из них ');
+    t = t.replace(/ — forma corectă:/g, ' — правильная форма:');
+    t = t.replace(/ — regula:/g, ' — правило:');
+    t = t.replace(/ — care verb\?/g, ' — какой глагол?');
+    t = t.replace(/ — care prepoziție\?/g, ' — какой предлог?');
+    t = t.replace(/ vs /g, ' или ');
+    t = t.replace(/înseamnă în engleză:/g, 'означает:');
+    t = t.replace(/înseamnă:/g, 'означает:');
+    t = t.replace(/însemnă:/g, 'означает:');
+    t = t.replace(/\beste echivalentul lui:/g, 'эквивалентно:');
+    t = t.replace(/\beste folosit în România ca:/g, 'используется в Румынии как:');
+    t = t.replace(/\beste de genul:/g, 'относится к роду:');
+    t = t.replace(/\bpoate însemna:/g, 'может означать:');
+    t = t.replace(/\bpoate să fie:/g, 'может быть:');
+    t = t.replace(/\bse folosește cu:/g, 'используется с:');
+    t = t.replace(/\bse conjugă la/g, 'спрягается для');
+    t = t.replace(/\bla plural devine:/g, 'во мн.ч. становится:');
+    t = t.replace(/\bla masculin plural devine:/g, 'в муж. мн.ч. становится:');
+    t = t.replace(/\bla "Ei":/g, 'для "Они":');
+    t = t.replace(/\bapare la persoanele:/g, 'используется для лиц:');
+    t = t.replace(/\bnecesită prepoziție\?/g, 'требует предлог?');
+    t = t.replace(/ca frecvență/g, '(как частота)');
+    t = t.replace(/\bintroduce:/g, 'вводит:');
+    t = t.replace(/\beste opusul lui:/g, 'является противоположностью:');
+    t = t.replace(/\beste:/g, 'это:');
+    t = t.replace(/\bsunt:/g, 'это:');
+    t = t.replace(/^Completați:/g, 'Дополните:');
+    t = t.replace(/^Negativ:/g, 'Отрицание:');
+    t = t.replace(/^Care /g, 'Какой/Какая ');
+    t = t.replace(/\(politețe\)/g, '(вежливо)');
+    // Translate any remaining English words → Russian
+    t = _trReplace(t);
+  } else {
+    // ---- ROMANIAN → ENGLISH structural patterns ----
+    t = t.replace(/Care propoziție de prezentare este GREȘITĂ\?/g, 'Which introduction sentence is WRONG?');
+    t = t.replace(/Care propoziție este GREȘITĂ\?/g, 'Which sentence is WRONG?');
+    t = t.replace(/Care propoziție folosește CORECT/g, 'Which sentence CORRECTLY uses');
+    t = t.replace(/Care variantă este CORECTĂ/g, 'Which variant is CORRECT');
+    t = t.replace(/Care folosire a lui (.*?) este CORECTĂ\?/g, 'Which use of $1 is CORRECT?');
+    t = t.replace(/Care plural masculin este GREȘIT\?/g, 'Which masculine plural is WRONG?');
+    t = t.replace(/Care plural este NEREGULAT\?/g, 'Which plural is IRREGULAR?');
+    t = t.replace(/Care substantiv NU are plural\?/g, 'Which noun has NO plural?');
+    t = t.replace(/Care NU este un fruct\?/g, 'Which is NOT a fruit?');
+    t = t.replace(/Cum spunem (.*?) în română\?/g, 'How do we say $1 in Romanian?');
+    t = t.replace(/Cum spunem (.*?) la plural\/formal\?/g, 'How to say $1 (plural/formal)?');
+    t = t.replace(/Regula generală pluralul masculin/g, 'General rule for masculine plural');
+    t = t.replace(/Regula pentru feminin/g, 'Rule for feminine');
+    t = t.replace(/Forma scurtă negativă a lui/g, 'Short negative form of');
+    t = t.replace(/Excepție la masculine:/g, 'Exception for masculine:');
+    t = t.replace(/Excepție la neutre:/g, 'Exception for neuter:');
+    t = t.replace(/Femininele și neutrele au aceleași terminații la:/g, 'Feminine and neuter have the same endings for:');
+    t = t.replace(/Cel mai neregulat plural:/g, 'Most irregular plural:');
+    t = t.replace(/Pluralul NEREGULAT al lui/g, 'IRREGULAR plural of');
+    t = t.replace(/Pluralul lui/g, 'Plural of');
+    t = t.replace(/Primul anotimp al anului:/g, 'First season of the year:');
+    t = t.replace(/Prima masă a zilei:/g, 'First meal of the day:');
+    t = t.replace(/Prietena ta spune/g, 'Your friend says');
+    t = t.replace(/Tu răspunzi informal:/g, 'You reply informally:');
+    t = t.replace(/Răspuns politicos la/g, 'Polite response to');
+    t = t.replace(/Despărțire caldă, informală:/g, 'Warm, informal goodbye:');
+    t = t.replace(/Zilele de weekend:/g, 'Weekend days:');
+    t = t.replace(/Luna a (\d+)-a a anului este:/g, 'The $1th month of the year is:');
+    t = t.replace(/Care zi vine DUPĂ/g, 'Which day comes AFTER');
+    t = t.replace(/Care lună vine ÎNAINTE de/g, 'Which month comes BEFORE');
+    t = t.replace(/Verbele (.*?) urmează modelul:/g, 'Verbs $1 follow the pattern:');
+    t = t.replace(/ — care e /g, ' — which one is ');
+    t = t.replace(/ — care este /g, ' — which one is ');
+    t = t.replace(/ — forma corectă:/g, ' — correct form:');
+    t = t.replace(/ — regula:/g, ' — the rule:');
+    t = t.replace(/ — care verb\?/g, ' — which verb?');
+    t = t.replace(/ — care prepoziție\?/g, ' — which preposition?');
+    t = t.replace(/înseamnă în engleză:/g, 'means in English:');
+    t = t.replace(/înseamnă:/g, 'means:');
+    t = t.replace(/\beste echivalentul lui:/g, 'is equivalent to:');
+    t = t.replace(/\beste folosit în România ca:/g, 'is used in Romania as:');
+    t = t.replace(/\beste de genul:/g, 'is of gender:');
+    t = t.replace(/\bpoate însemna:/g, 'can mean:');
+    t = t.replace(/\bpoate să fie:/g, 'can be:');
+    t = t.replace(/\bse folosește cu:/g, 'is used with:');
+    t = t.replace(/\bse conjugă la/g, 'is conjugated for');
+    t = t.replace(/\bla plural devine:/g, 'in plural becomes:');
+    t = t.replace(/\bla masculin plural devine:/g, 'in masculine plural becomes:');
+    t = t.replace(/\bla "Ei":/g, 'for "They":');
+    t = t.replace(/\bapare la persoanele:/g, 'appears for persons:');
+    t = t.replace(/\bnecesită prepoziție\?/g, 'need a preposition?');
+    t = t.replace(/ca frecvență/g, '(as frequency)');
+    t = t.replace(/\bintroduce:/g, 'introduces:');
+    t = t.replace(/\beste opusul lui:/g, 'is the opposite of:');
+    t = t.replace(/\beste:/g, 'is:');
+    t = t.replace(/\bsunt:/g, 'are:');
+    t = t.replace(/^Completați:/g, 'Complete:');
+    t = t.replace(/^Negativ:/g, 'Negative:');
+    t = t.replace(/^Care /g, 'Which ');
+    t = t.replace(/\(politețe\)/g, '(polite)');
+  }
   return t;
 }
 
