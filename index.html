@@ -1062,7 +1062,7 @@ function renderQuestion() {
   // Translation hint button
   const langLabel = getLang() === 'ru' ? 'RU' : 'EN';
   html += `<div class="q-translate-wrap">
-    <button class="q-translate-btn" onclick="toggleQTranslation(this)" title="Translate question">🌐 ${langLabel}</button>
+    <button class="q-translate-btn" onclick="toggleQTranslation(this)" title="Hint">💡</button>
     <div class="q-translation" id="q-translation"></div>
   </div>`;
   if (q.note) html += `<div class="q-note">${q.note}</div>`;
