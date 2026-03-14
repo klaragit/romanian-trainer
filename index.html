@@ -90,7 +90,6 @@ body{background:var(--bg);color:var(--text);font-family:'DM Sans',sans-serif;min
 .sess-progress{flex:1;display:flex;flex-direction:column;gap:6px;}
 .sess-progress-bar{height:6px;background:var(--border);border-radius:99px;overflow:hidden;}
 .sess-counter{font-size:.78rem;color:var(--muted);}
-.sess-lives{font-size:1.1rem;letter-spacing:2px;}
 .sess-streak{font-size:.85rem;color:var(--gold);font-weight:600;min-width:50px;text-align:center;}
 .sess-timer{font-size:.85rem;color:var(--muted);min-width:50px;text-align:right;}
 .quit-btn{background:none;border:none;color:var(--muted);font-size:.8rem;cursor:pointer;padding:4px 12px;border-radius:99px;border:1px solid var(--border);font-family:'DM Sans',sans-serif;}
@@ -391,7 +390,6 @@ body{background:var(--bg);color:var(--text);font-family:'DM Sans',sans-serif;min
         <button class="lang-btn active" data-lang="en" onclick="setLang('en')">EN 🇬🇧</button>
         <button class="lang-btn" data-lang="ru" onclick="setLang('ru')">RU 🇷🇺</button>
       </div>
-      <div class="hstat"><div class="hstat-val" id="home-xp">0</div><div class="hstat-lbl">XP</div></div>
       <div class="hstat"><div class="hstat-val" id="home-streak">🔥 0</div><div class="hstat-lbl">Streak</div></div>
     </div>
   </header>
@@ -399,10 +397,10 @@ body{background:var(--bg);color:var(--text);font-family:'DM Sans',sans-serif;min
     <div class="home-main">
       <div class="home-hero">
         <h1>Caietul Tău de Română</h1>
-        <p>Întrebări create din notițele tale · 15 pagini · 11 module</p>
+        <p>244 întrebări · 15 pagini · 11 module</p>
       </div>
       <button class="session-start" onclick="startSession()">▶ Start</button>
-      <p class="session-hint">20 de întrebări aleatoare din toate modulele · ~90 sec fiecare</p>
+      <p class="session-hint">20 de întrebări noi din toate modulele · fără repetiții</p>
     </div>
     <div class="home-sidebar">
       <div class="sidebar-hdr">Module</div>
@@ -418,7 +416,6 @@ body{background:var(--bg);color:var(--text);font-family:'DM Sans',sans-serif;min
       <div class="sess-progress-bar"><div class="sess-progress-fill" id="sess-prog-fill" style="width:0%"></div></div>
       <div class="sess-counter" id="sess-counter">Întrebarea 1 din 20</div>
     </div>
-    <div class="sess-lives" id="sess-lives">💙💙💙</div>
     <div class="sess-streak" id="sess-streak">🔥 0</div>
     <div class="sess-timer" id="sess-timer">0:00</div>
     <button class="sound-btn" id="sound-btn" onclick="toggleSound()" title="Toggle sound">🔊</button>
@@ -498,13 +495,12 @@ body{background:var(--bg);color:var(--text);font-family:'DM Sans',sans-serif;min
     <div class="results-title" id="res-title">Session Complete!</div>
     <div class="results-score"><span id="res-correct">0</span><span> / <span id="res-total">20</span></span></div>
     <div class="results-stats">
-      <div class="res-stat"><div class="res-stat-val" id="res-xp">+0</div><div class="res-stat-lbl">XP Earned</div></div>
       <div class="res-stat"><div class="res-stat-val" id="res-time">0:00</div><div class="res-stat-lbl">Time</div></div>
       <div class="res-stat"><div class="res-stat-val" id="res-pct">0%</div><div class="res-stat-lbl">Accuracy</div></div>
     </div>
     <div class="results-msg" id="res-msg"></div>
     <div class="results-btns">
-      <button class="btn-primary" onclick="startSession()">Joacă din nou</button>
+      <button class="btn-primary" onclick="startSession()">Sesiune nouă</button>
       <button class="btn-secondary" onclick="showScreen('home')">Acasă</button>
     </div>
     <div class="weak-areas" id="weak-areas"></div>
@@ -539,6 +535,13 @@ const MODULES = [
     { type:'mc', q:'"Servus" este folosit în România ca:', opts:['Salut informal (sosire și plecare)','Numai la plecare','Salut formal','Expresie de mulțumire'], a:'Salut informal (sosire și plecare)', e:'"Servus" (din germană) se folosește și la întâlnire și la despărțire, ca "Ciao".', page:2 },
     { type:'mc', q:'Care variantă este CORECTĂ pentru "I\'m happy to meet you"?', opts:['Mă bucur să te cunosc.','Eu bucur să te cunosc.','Bucuros te cunosc.','Mă face bucuros.'], a:'Mă bucur să te cunosc.', e:'Verbul reflexiv "a se bucura" necesită "mă". "Mă bucur" = I am glad.', page:2 },
     { type:'fill', q:'"Fericit" înseamnă în engleză: "___"', a:'happy', alt:['Happy'], e:'"Fericit/Fericită" = happy. Opus: "Supărat/Supărată" = upset. "Trist" = sad.', page:2 },
+    // Supplementary practice
+    { type:'fill', q:'Cum te prezinți formal? "Mă ___ Ion Popescu."', a:'numesc', alt:['Numesc'], e:'"Mă numesc" = my name is (formal). "Mă cheamă" = more casual.', page:0 },
+    { type:'mc', q:'"Bună dimineața!" se folosește:', opts:['Dimineața (până la ~12)','Oricând','Seara','Numai la plecare'], a:'Dimineața (până la ~12)', e:'"Bună dimineața" = Good morning. "Bună ziua" = Good afternoon. "Bună seara" = Good evening.', page:0 },
+    { type:'fill', q:'Când pleci, spui: "La ___!"', a:'revedere', alt:['Revedere'], e:'"La revedere!" = Goodbye (formal). "Pa!" = Bye (informal).', page:0 },
+    { type:'mc', q:'"Cum ești?" vs "Ce mai faci?" — diferența:', opts:['Ambele = How are you?','Cum ești = formal','Ce mai faci = formal','Sunt diferite complet'], a:'Ambele = How are you?', e:'Ambele se folosesc zilnic. "Ce mai faci?" e puțin mai informal.', page:0 },
+    { type:'fill', q:'"Mă ___ să te cunosc!" (I\'m glad to meet you)', a:'bucur', alt:['Bucur'], e:'"Mă bucur" = I\'m glad. Verb reflexiv: "a se bucura".', page:0 },
+    { type:'mc', q:'"Noapte bună!" se spune:', opts:['La culcare / seara târziu','Dimineața','La prânz','Oricând'], a:'La culcare / seara târziu', e:'"Noapte bună!" = Good night. Folosit doar seara târziu sau la culcare.', page:0 },
   ]
 },
 {
@@ -557,6 +560,13 @@ const MODULES = [
     { type:'mc', q:'"Ele nu sunt" înseamnă:', opts:['They (fem.) are not','She is not','We are not','You (pl.) are not'], a:'They (fem.) are not', e:'"Ele" = they (feminine). "Ei" = they (masculine/mixed). Ambele folosesc "sunt".', page:3 },
     { type:'fill', q:'"___ bine, mulțumesc!" (I am fine)', a:'Sunt', alt:['sunt'], e:'"Sunt bine" = I am fine. Răspuns la "Cum ești?" sau "Ce mai faci?"', page:3 },
     { type:'mc', q:'"Sunt" apare la persoanele:', opts:['Eu și Ei/Ele','Tu și Noi','El/Ea și Voi','Numai Eu'], a:'Eu și Ei/Ele', e:'Particularitate: "Eu sunt" și "Ei/Ele sunt" — aceeași formă!', page:3 },
+    // Supplementary practice
+    { type:'fill', q:'"Voi ___ prieteni buni." (you pl. are)', a:'sunteți', e:'"Voi sunteți" = you (plural) are. Aceeași formă cu "Dumneavoastră sunteți".', page:0 },
+    { type:'mc', q:'Care formă este pentru "El/Ea"?', opts:['este','sunt','ești','suntem'], a:'este', e:'"El/Ea este" sau scurt "e". Forma a treia singular.', page:0 },
+    { type:'fill', q:'"Ea ___ medic, nu profesoară."', a:'este', alt:['e','Este','E'], e:'"Ea este" = she is. Forma scurtă: "Ea e".', page:0 },
+    { type:'mc', q:'"Nu-s" este forma scurtă pentru:', opts:['Nu sunt','Nu ești','Nu este','Nu sunteți'], a:'Nu sunt', e:'"Nu-s" = colocvial pentru "nu sunt". "Nu-i" = "nu este".', page:0 },
+    { type:'fill', q:'"___ obosită?" (Are you tired? - informal)', a:'Ești', alt:['esti','ești'], e:'"Tu ești" = you are. "Ești obosită?" se adresează unei femei.', page:0 },
+    { type:'mc', q:'Completați: "Noi nu ___ de acord."', opts:['suntem','sunteți','sunt','este'], a:'suntem', e:'"Noi suntem" = we are. "A fi de acord" = to agree.', page:0 },
   ]
 },
 {
@@ -584,6 +594,14 @@ const MODULES = [
     { type:'mc', q:'Verbele "a vorbi" urmează modelul:', opts:['-esc/-ești/-ește','-ez/-ezi/-ează','-m/-ți/-ă','-u/-i/-ă'], a:'-esc/-ești/-ește', e:'Eu vorbesc, tu vorbești, el vorbește... Terminația -esc = verbe de tip IV.', page:8 },
     { type:'mc', q:'"Eu am timp liber." — care verb?', opts:['A avea','A fi','A face','A merge'], a:'A avea', e:'"A avea" = to have. Conjugare: am/ai/are/avem/aveți/au.', page:10 },
     { type:'fill', q:'"Ei ___ o idee grozavă." (a avea)', a:'au', e:'"Ei/Ele au" = they have. Nu confundați cu "Eu am"!', page:10 },
+    // Supplementary practice
+    { type:'fill', q:'"Noi ___ în parc duminica." (a merge)', a:'mergem', e:'"Noi mergem" = we go. "Mergem" este forma pentru "noi".', page:0 },
+    { type:'mc', q:'"Ea ___ într-un bloc." (a locui)', opts:['locuiește','locuiesc','locuim','locuiți'], a:'locuiește', e:'"A locui": locuiesc/locuiești/locuiește/locuim/locuiți/locuiesc. Tip IV (-esc).', page:0 },
+    { type:'fill', q:'"Tu ___ românește?" (a vorbi)', a:'vorbești', e:'"Tu vorbești" = you speak. "A vorbi" = to speak. Tip IV (-esc/-ești/-ește).', page:0 },
+    { type:'mc', q:'"Noi ___ cafeaua dimineața." (a bea)', opts:['bem','beau','bei','beți'], a:'bem', e:'"Noi bem" = we drink. "Eu beau", "Tu bei", "El bea", "Noi bem".', page:0 },
+    { type:'fill', q:'"El ___ muzică clasică." (a asculta)', a:'ascultă', alt:['asculta'], e:'"El ascultă" = he listens. "A asculta": ascult/asculți/ascultă/ascultăm/ascultați/ascultă.', page:0 },
+    { type:'mc', q:'"Voi ___ filmul acesta?" (a vedea)', opts:['vedeți','văd','vedem','vezi'], a:'vedeți', e:'"Voi vedeți" = you (pl.) see. "A vedea": văd/vezi/vede/vedem/vedeți/văd.', page:0 },
+    { type:'fill', q:'"Copiii ___ la școală." (a învăța)', a:'învață', alt:['invata'], e:'"Ei/Ele învață" = they learn. "A învăța": învăț/înveți/învață/învățăm/învățați/învață.', page:0 },
   ]
 },
 {
@@ -602,6 +620,13 @@ const MODULES = [
     { type:'mc', q:'"Pompier" vine din:', opts:['Franceză','Engleză','Italiană','Germană'], a:'Franceză', e:'"Pompier" = firefighter, împrumutat din franceză.', page:10 },
     { type:'fill', q:'Pluralul lui "frate" este: ___', a:'frați', e:'"Frate" → "frați". Regula: -te + -i → -ți.', page:3 },
     { type:'mc', q:'"Fiica mea" înseamnă:', opts:['My daughter','My son','My niece','My granddaughter'], a:'My daughter', e:'"Fiică" = daughter. "Fiu" = son. "Fiica mea" / "fiul meu".', page:3 },
+    // Supplementary practice
+    { type:'fill', q:'"___ mea este profesoară." (my wife)', a:'Soția', alt:['sotia','Sotia','soția'], e:'"Soția mea" = my wife. "Soțul meu" = my husband.', page:0 },
+    { type:'mc', q:'"Nora" este:', opts:['Soția fiului','Soția fratelui','Fiica surorii','Mama soțului'], a:'Soția fiului', e:'"Noră" = daughter-in-law. "Ginere" = son-in-law.', page:0 },
+    { type:'fill', q:'"Un ___ lucrează la restaurant." (chef)', a:'bucătar', alt:['Bucatar','bucatar','Bucătar'], e:'"Bucătar" = chef/cook. "Bucătărie" = kitchen. "A găti" = to cook.', page:0 },
+    { type:'mc', q:'"Mătușa" este:', opts:['Sora mamei sau a tatălui','Mama bunicii','Soția nepotului','Vecina'], a:'Sora mamei sau a tatălui', e:'"Mătușă" = aunt. "Unchi" = uncle. "Văr/Vară" = cousin.', page:0 },
+    { type:'fill', q:'"El are doi ___." (sons)', a:'fii', alt:['Fii'], e:'"Fiu" → "fii" — plural neregulat! "Doi fii" = two sons.', page:0 },
+    { type:'mc', q:'"Avocat" vs "Doctor" — care lucrează la tribunal?', opts:['Avocat','Doctor','Ambii','Niciunul'], a:'Avocat', e:'"Avocat" = lawyer. "Doctor/Medic" = doctor. "Tribunal" = court.', page:0 },
   ]
 },
 {
@@ -622,6 +647,13 @@ const MODULES = [
     { type:'mc', q:'"La ce oră?" înseamnă:', opts:['At what time?','What time is it?','How much time?','Since when?'], a:'At what time?', e:'"La ce oră?" = At what time? Răspuns: "La ora..."', page:9 },
     { type:'mc', q:'"Dimineața" ca frecvență înseamnă:', opts:['Every morning','In the morning','Good morning','Early'], a:'Every morning', e:'"Dimineața" = every morning (frecvență). "Bună dimineața!" = Good morning!', page:9 },
     { type:'fill', q:'"Day after tomorrow" se spune:', a:'Poimâine', alt:['poimâine','poimaine'], e:'"Poimâine" = day after tomorrow. "Răspoimâine" = two days after tomorrow.', page:7 },
+    // Supplementary practice
+    { type:'fill', q:'Care este a treia zi din săptămână? ___', a:'Miercuri', alt:['miercuri'], e:'Luni (1) → Marți (2) → Miercuri (3) → Joi (4) → Vineri (5).', page:0 },
+    { type:'mc', q:'"Vara" înseamnă:', opts:['Summer','Spring','Winter','Autumn'], a:'Summer', e:'"Vara" = summer. "Primăvara" = spring. "Toamna" = autumn.', page:0 },
+    { type:'fill', q:'"E ora trei fără un ___." (2:45)', a:'sfert', alt:['Sfert'], e:'"Fără un sfert" = a quarter to. "Ora trei fără un sfert" = 2:45.', page:0 },
+    { type:'mc', q:'Care lună are 28 (sau 29) de zile?', opts:['Februarie','Ianuarie','Martie','Aprilie'], a:'Februarie', e:'"Februarie" = February. An bisect: 29 zile. "Februarie" = luna a doua.', page:0 },
+    { type:'fill', q:'"Anul are patru ___." (seasons)', a:'anotimpuri', alt:['Anotimpuri'], e:'"Anotimp" [N] → "anotimpuri". Iarna, Primăvara, Vara, Toamna.', page:0 },
+    { type:'mc', q:'"Aseară" înseamnă:', opts:['Last evening/night','This morning','Tomorrow','Yesterday morning'], a:'Last evening/night', e:'"Aseară" = last evening/last night. "Ieri" = yesterday. "Azi" = today.', page:0 },
   ]
 },
 {
@@ -642,6 +674,13 @@ const MODULES = [
     { type:'fill', q:'Pluralul lui "pix" (n.) cu "-uri":', a:'pixuri', e:'"Pix" → "pixuri". Neutre + "-uri": curs→cursuri, birou→birouri.', page:13 },
     { type:'mc', q:'Excepție la neutre: "ou" → ?', opts:['ouă','oui','oue','oule'], a:'ouă', e:'"Ou" → "ouă" — excepție clasică! "Ouă fierte" = boiled eggs.', page:13 },
     { type:'mc', q:'Femininele și neutrele au aceleași terminații la:', opts:['Plural','Singular','Ambele','Niciunul'], a:'Plural', e:'Neutrul = masculin la sg, feminin la pl. "Un caiet / două caiete" ca "o fată / două fete".', page:13 },
+    // Supplementary practice
+    { type:'fill', q:'Pluralul lui "stea" (f.):', a:'stele', alt:['Stele'], e:'"Stea" → "stele". Feminin: -ea → -ele.', page:0 },
+    { type:'mc', q:'"Scaun" (n.) → plural:', opts:['scaune','scauni','scaunuri','scaunele'], a:'scaune', e:'"Scaun" → "scaune". Neutru + "-e": scaun→scaune, caiet→caiete.', page:0 },
+    { type:'fill', q:'Pluralul lui "profesor" (m.):', a:'profesori', alt:['Profesori'], e:'"Profesor" → "profesori". Masculin: consoană + "-i".', page:0 },
+    { type:'mc', q:'"Floare" (f.) → plural:', opts:['flori','floare','floaruri','florale'], a:'flori', e:'"Floare" → "flori". Feminin: -e → -i cu schimbare vocală.', page:0 },
+    { type:'fill', q:'Pluralul lui "birou" (n.):', a:'birouri', alt:['Birouri'], e:'"Birou" → "birouri". Neutru + "-uri": curs→cursuri, loc→locuri.', page:0 },
+    { type:'mc', q:'Care plural este CORECT?', opts:['geam → geamuri','geam → geami','geam → geame','geam → geamii'], a:'geam → geamuri', e:'"Geam" [N] → "geamuri". Neutru cu "-uri".', page:0 },
   ]
 },
 {
@@ -660,6 +699,13 @@ const MODULES = [
     { type:'mc', q:'Care propoziție folosește CORECT "la"?', opts:['La etaj','La cameră','La casă','La centru'], a:'La etaj', e:'"La etaj" ✓. "În cameră", "în casă" (nu "la").', page:5 },
     { type:'mc', q:'"În mașină" sau "La mașină"?', opts:['În mașină','La mașină','Ambele','Niciuna'], a:'În mașină', e:'Vehiculele folosesc "în": în tren, în avion, în mașină.', page:5 },
     { type:'mc', q:'"Acasă" necesită prepoziție?', opts:['Nu — "Merg acasă"','Da — "Merg la acasă"','Da — "Merg în acasă"','Depinde'], a:'Nu — "Merg acasă"', e:'"Acasă" = home. Fără prepoziție! "Aici", "acolo", "afară" la fel.', page:5 },
+    // Supplementary practice
+    { type:'fill', q:'"Stau ___ sufragerie." (in the dining room)', a:'în', alt:['in'], e:'"În sufragerie" = in the dining room. "În" + spații închise.', page:0 },
+    { type:'mc', q:'"Merg ___ doctor." — care prepoziție?', opts:['la','în','pe','sub'], a:'la', e:'"La doctor" = to the doctor. "La" pentru persoane: la doctor, la profesor.', page:0 },
+    { type:'fill', q:'"Pisica doarme ___ canapea." (on)', a:'pe', alt:['Pe'], e:'"Pe canapea" = on the couch. "Pe" = on (suprafețe).', page:0 },
+    { type:'mc', q:'"Mergem ___ mare vara."', opts:['la','în','pe','sub'], a:'la', e:'"La mare" = to the sea/beach. "La" pentru destinații deschise: munte, mare, piață.', page:0 },
+    { type:'fill', q:'"Cheia este ___ ușă." (behind)', a:'după', alt:['dupa','După','Dupa'], e:'"După ușă" = behind the door. "După" = after/behind.', page:0 },
+    { type:'mc', q:'"Stau ___ tine." (next to you)', opts:['lângă','pe','sub','în'], a:'lângă', e:'"Lângă" = next to. "Stau lângă tine" = I sit next to you.', page:0 },
   ]
 },
 {
@@ -681,6 +727,13 @@ const MODULES = [
     { type:'fill', q:'"Spăl rufele cu ___ de spălat." (washing...)', a:'mașina', alt:['masina'], e:'"Mașina de spălat" = washing machine. "Mașina de spălat vase" = dishwasher.', page:10 },
     { type:'mc', q:'"Vecin" înseamnă:', opts:['Neighbour','Friend','Colleague','Relative'], a:'Neighbour', e:'"Vecin/Vecină" = neighbour. "Vecini" = neighbours.', page:10 },
     { type:'mc', q:'"Cântec" vs "muzică" — care e "song"?', opts:['Cântec','Muzică','Melodie','Ritm'], a:'Cântec', e:'"Cântec" = song. "Muzică" = music. "A cânta" = to sing.', page:10 },
+    // Supplementary practice
+    { type:'fill', q:'"Am un ___ mare în dormitor." (wardrobe)', a:'dulap', alt:['Dulap'], e:'"Dulap" = wardrobe/closet. Plural: "dulapuri". "Dulap de haine" = clothes wardrobe.', page:0 },
+    { type:'mc', q:'"Covor" înseamnă:', opts:['Carpet/Rug','Curtain','Ceiling','Floor'], a:'Carpet/Rug', e:'"Covor" = carpet/rug. "Perdea" = curtain. "Tavan" = ceiling. "Podea" = floor.', page:0 },
+    { type:'fill', q:'"___ bate la ușă." (someone)', a:'Cineva', alt:['cineva'], e:'"Cineva" = someone. "Nimeni" = nobody. "Cineva bate" = someone is knocking.', page:0 },
+    { type:'mc', q:'"Fereastră" înseamnă:', opts:['Window','Door','Wall','Roof'], a:'Window', e:'"Fereastră" = window. "Ușă" = door. "Perete" = wall. "Acoperiș" = roof.', page:0 },
+    { type:'fill', q:'"Mi-e ___." (I\'m cold)', a:'frig', alt:['Frig'], e:'"Mi-e frig" = I\'m cold. "Mi-e cald" = I\'m hot. "Frig" = cold (noun).', page:0 },
+    { type:'mc', q:'"Scară" poate însemna:', opts:['Stairs AND staircase','Only stairs','Only ladder','Floor'], a:'Stairs AND staircase', e:'"Scară" = stairs/staircase/ladder. "Etaj" = floor/level. "Lift" = elevator.', page:0 },
   ]
 },
 {
@@ -701,6 +754,13 @@ const MODULES = [
     { type:'mc', q:'"Ora patru și un sfert" = ?', opts:['4:15','4:30','4:45','4:00'], a:'4:15', e:'"Și un sfert" = quarter past. "Un sfert" = a quarter.', page:6 },
     { type:'mc', q:'"De aceea" introduce:', opts:['O consecință (that\'s why)','O cauză (because)','O condiție (if)','Un contrast (however)'], a:'O consecință (that\'s why)', e:'"De aceea" = that\'s why. Introduce rezultatul. "Fiindcă" introduce cauza.', page:13 },
     { type:'fill', q:'"___ se află gara?" (Where is the station?)', a:'Unde', alt:['unde'], e:'"Unde se află...?" = Where is... located? "Se află" = is located.', page:4 },
+    // Supplementary practice
+    { type:'fill', q:'"___ noaptea, am dormit bine." (last night)', a:'Aseară', alt:['aseara','Aseara','aseară'], e:'"Aseară" = last night/evening. "Azi-noapte" = last night (during the night).', page:0 },
+    { type:'mc', q:'"Îmi place foarte mult!" = ?', opts:['I like it a lot!','I don\'t like it!','It\'s okay.','I love you!'], a:'I like it a lot!', e:'"A plăcea" = to like. "Îmi place" = I like. "Foarte mult" = very much/a lot.', page:0 },
+    { type:'fill', q:'"Nu ___!" (It doesn\'t matter!)', a:'contează', alt:['conteaza'], e:'"Nu contează" = It doesn\'t matter. "A conta" = to matter/count.', page:0 },
+    { type:'mc', q:'"Poftă bună!" se spune:', opts:['Înainte de masă (enjoy your meal)','După masă','La plecare','Dimineața'], a:'Înainte de masă (enjoy your meal)', e:'"Poftă bună!" = Enjoy your meal / Bon appétit! "Poftă" = appetite.', page:0 },
+    { type:'fill', q:'"Cum se ___ asta în română?" (How do you say...)', a:'spune', alt:['Spune','zice'], e:'"Cum se spune?" = How do you say? "A spune" = to say. "A zice" = to say (informal).', page:0 },
+    { type:'mc', q:'"Noroc!" poate însemna:', opts:['Cheers! AND Good luck!','Numai noroc (luck)','Numai toast','Salut formal'], a:'Cheers! AND Good luck!', e:'"Noroc!" = Cheers (la toast) sau Good luck! Depinde de context.', page:0 },
   ]
 },
 {
@@ -731,6 +791,13 @@ const MODULES = [
     { type:'mc', q:'"Puțin" este opusul lui:', opts:['Mult','Destul','Chiar','Atât'], a:'Mult', e:'"Puțin/Puțină/Puțini/Puține" = little/few. Opusul: "Mult/Multă/Mulți/Multe".', page:14 },
     { type:'fill', q:'"Opriți ___!" (Stop here!)', a:'aici', alt:['Aici'], e:'"Opriți aici!" = Stop here! "Păstrați restul!" = Keep the change!', page:14 },
     { type:'mc', q:'"Timp" (time) este de genul:', opts:['Neutru (timpuri)','Masculin (timpi)','Feminin (timpuri)','Neutru (timpe)'], a:'Neutru (timpuri)', e:'"Timp" [N] → "timpuri". Neutrul = masculin la sg, feminin la pl.', page:14 },
+    // Supplementary practice
+    { type:'fill', q:'"O ___ de vin" (a bottle of wine)', a:'sticlă', alt:['sticla','Sticla','Sticlă'], e:'"Sticlă" = bottle. "O sticlă de vin" = a bottle of wine. Plural: "sticle".', page:0 },
+    { type:'mc', q:'"Suficient" este sinonimul lui:', opts:['Destul','Puțin','Mult','Foarte'], a:'Destul', e:'"Suficient" = "destul" = enough. "Suficient de bine" = "destul de bine".', page:0 },
+    { type:'fill', q:'"Am nevoie de ___ zahăr." (a little)', a:'puțin', alt:['putin','Putin','Puțin'], e:'"Puțin zahăr" = a little sugar. "Zahăr" [N] = sugar (nenumărabil).', page:0 },
+    { type:'mc', q:'"Niciodată" este opusul lui:', opts:['Întotdeauna','Uneori','Rar','Adesea'], a:'Întotdeauna', e:'"Niciodată" = never. "Întotdeauna" = always. Opuse perfecte.', page:0 },
+    { type:'fill', q:'"___ de cumpărături" (shopping bag)', a:'Pungă', alt:['punga','punGA','Punga','pungă'], e:'"Pungă" = bag. "Plasă" = reusable bag. "Pungă de cumpărături" = shopping bag.', page:0 },
+    { type:'mc', q:'"O doză de bere" — "doză" = ?', opts:['A can','A glass','A pint','A mug'], a:'A can', e:'"Doză" = can (for drinks). "O conservă" = a can (for food). "Doză de suc" = can of juice.', page:0 },
   ]
 },
 {
@@ -763,6 +830,14 @@ const MODULES = [
     { type:'fill', q:'"___" [F] = life (plural: vieți)', a:'Viață', alt:['viata','Viata','viață'], e:'"Viață" [F] = life. "Vieți" = lives. "O viață frumoasă" = a beautiful life.', page:15 },
     { type:'mc', q:'"Bijuterie" (plural "bijuterii") înseamnă:', opts:['Jewelry','Beauty','Treasure','Crystal'], a:'Jewelry', e:'"Bijuterie" [F] = jewelry/jewel. "Bijuterii" = jewelry (pl). "Magazin de bijuterii" = jewelry store.', page:15 },
     { type:'mc', q:'Care NU este un fruct?', opts:['Perișoare','Piersică','Prună','Zmeură'], a:'Perișoare', e:'"Perișoare" = meatballs (NU fruct!). Piersică, prună, zmeură = fructe.', page:15 },
+    // Supplementary practice
+    { type:'fill', q:'"O ___ de mere" (an apple)', a:'măr', alt:['mar','Mar','Măr'], e:'"Măr" [N] = apple. Plural: "mere". "Suc de mere" = apple juice.', page:0 },
+    { type:'mc', q:'"Ciorbă" vs "Supă" — care diferența?', opts:['Ciorbă = sour soup, Supă = clear soup','Sunt identice','Ciorbă = cold, Supă = hot','Ciorbă = dessert'], a:'Ciorbă = sour soup, Supă = clear soup', e:'"Ciorbă" = sour soup (cu borș). "Supă" = clear soup. "Ciorbă de legume" = vegetable sour soup.', page:0 },
+    { type:'fill', q:'"Vreau un ___ de apă, vă rog." (a glass)', a:'pahar', alt:['Pahar'], e:'"Pahar" = glass. "Un pahar de apă" = a glass of water. Plural: "pahare".', page:0 },
+    { type:'mc', q:'"Nota" la restaurant înseamnă:', opts:['The bill/check','A note/letter','A grade','A music note'], a:'The bill/check', e:'"Nota, vă rog!" = The bill, please! "Notă" poate = bill, grade, music note.', page:0 },
+    { type:'fill', q:'"Vreau o ___ cu brânză." (a pie/pastry)', a:'plăcintă', alt:['placinta','Placinta','Plăcintă'], e:'"Plăcintă" = pie/pastry. "Plăcintă cu brânză" = cheese pie (tradițional românesc!).', page:0 },
+    { type:'mc', q:'"Legume" vs "Fructe" — "morcov" este:', opts:['Legumă (vegetable)','Fruct (fruit)','Ambele','Nici una'], a:'Legumă (vegetable)', e:'"Morcov" = carrot = legumă. "Legume" = vegetables. "Fructe" = fruits.', page:0 },
+    { type:'fill', q:'"Mi-e ___, vreau să mănânc!" (hungry)', a:'foame', alt:['Foame'], e:'"Mi-e foame" = I\'m hungry. "Foame" = hunger. "A fi flămând" = to be hungry.', page:0 },
   ]
 }
 ];
@@ -772,7 +847,7 @@ const MODULES = [
 // STATE MANAGEMENT
 // =====================================================================
 const STORAGE_KEY = 'ro_caiet_v1';
-let S = { xp: 0, streak: 0, lastDate: null, modProgress: {}, mistakeLog: {}, lang: 'en' };
+let S = { streak: 0, lastDate: null, modProgress: {}, mistakeLog: {}, seenQs: {}, lang: 'en' };
 
 function loadS() {
   try { const d = JSON.parse(localStorage.getItem(STORAGE_KEY)); if(d) S = {...S, ...d}; }
@@ -856,6 +931,21 @@ const EN_RU = {
   'To bring':'Принести','To take':'Взять',
   'Jewelry':'Ювелирные изделия','Beauty':'Красота','Treasure':'Сокровище','Crystal':'Кристалл',
   'Chicken breast':'Куриная грудка','Chicken legs':'Куриные ножки',
+  // Supplementary question options
+  'Carpet/Rug':'Ковёр','Curtain':'Штора','Ceiling':'Потолок','Floor':'Пол',
+  'Window':'Окно','Door':'Дверь','Wall':'Стена','Roof':'Крыша',
+  'Stairs AND staircase':'Лестница','Only stairs':'Только ступени','Only ladder':'Только лестница',
+  'Cheers! AND Good luck!':'За здоровье! И Удачи!',
+  'I like it a lot!':'Мне очень нравится!',
+  "I don't like it!":'Мне не нравится!',
+  "It's okay.":'Нормально.','I love you!':'Я тебя люблю!',
+  'A can':'Банка (жест.)','A glass':'Стакан','A pint':'Пинта','A mug':'Кружка',
+  'The bill/check':'Счёт','A note/letter':'Записка','A grade':'Оценка','A music note':'Нота',
+  'Ciorbă = sour soup, Supă = clear soup':'Ciorbă = кислый суп, Supă = прозрачный суп',
+  'Last evening/night':'Вчера вечером','This morning':'Сегодня утром',
+  'Tomorrow':'Завтра','Yesterday morning':'Вчера утром',
+  'Legumă (vegetable)':'Овощ','Fruct (fruit)':'Фрукт',
+  'Paste (the meal)':'Паста (еда)',
 };
 
 // Word/phrase-level replacements for explanation text (sorted longest-first)
@@ -927,6 +1017,16 @@ const EN_RU_PHRASES = [
   ['treasure','сокровище'],['crystal','кристалл'],
   ['hungry','голодный'],['thirsty','жаждущий'],['tired','усталый'],
   ['order','заказать'],['bring','принести'],['cook','готовить'],
+  // Supplementary vocab
+  ['window','окно'],['door','дверь'],['wall','стена'],['roof','крыша'],
+  ['carpet','ковёр'],['curtain','штора'],['ceiling','потолок'],['floor','пол'],
+  ['stairs','лестница'],['ladder','лестница'],['elevator','лифт'],
+  ['glass','стакан'],['apple','яблоко'],['carrot','морковь'],
+  ['vegetable','овощ'],['vegetables','овощи'],['fruit','фрукт'],['fruits','фрукты'],
+  ['lawyer','адвокат'],['court','суд'],['aunt','тётя'],['uncle','дядя'],
+  ['cousin','двоюродный брат'],['behind','за/позади'],
+  ['someone','кто-то'],['nobody','никто'],['never','никогда'],['always','всегда'],
+  ['sometimes','иногда'],['often','часто'],['rarely','редко'],
 ].sort((a, b) => b[0].length - a[0].length);
 
 function getLang() { return S.lang || 'en'; }
@@ -1003,26 +1103,39 @@ function startSession(moduleId = null) {
     saveS();
   }
 
-  // Pick questions
+  // Pick questions (non-repeating: unseen first, reset when all seen)
+  if (!S.seenQs) S.seenQs = {};
   let pool = [];
-  if (moduleId) {
-    const mod = MODULES.find(m => m.id === moduleId);
-    if (mod) pool = mod.exercises.map(e => ({...e, moduleId, moduleName: mod.name}));
-  } else {
-    MODULES.forEach(m => m.exercises.forEach(e => pool.push({...e, moduleId: m.id, moduleName: m.name})));
+  const mods = moduleId ? MODULES.filter(m => m.id === moduleId) : MODULES;
+  mods.forEach(m => {
+    const seen = S.seenQs[m.id] || [];
+    m.exercises.forEach((e, idx) => {
+      pool.push({...e, moduleId: m.id, moduleName: m.name, _exIdx: idx, _seen: seen.includes(idx)});
+    });
+  });
+  // Separate unseen from seen
+  const unseen = pool.filter(q => !q._seen);
+  const seen = pool.filter(q => q._seen);
+  // If all questions seen, reset and use full pool
+  if (unseen.length === 0) {
+    mods.forEach(m => { S.seenQs[m.id] = []; });
+    pool.forEach(q => q._seen = false);
+    saveS();
   }
+  // Prioritize unseen; fill from seen if needed
+  let selected = unseen.length > 0 ? unseen : pool;
   // Shuffle
-  for (let i = pool.length - 1; i > 0; i--) {
+  for (let i = selected.length - 1; i > 0; i--) {
     const j = Math.floor(Math.random() * (i + 1));
-    [pool[i], pool[j]] = [pool[j], pool[i]];
+    [selected[i], selected[j]] = [selected[j], selected[i]];
   }
-  const target = moduleId ? pool.length : Math.min(20, pool.length);
-  pool = pool.slice(0, target);
+  const target = moduleId ? selected.length : Math.min(20, selected.length);
+  selected = selected.slice(0, target);
 
   // Sort by difficulty: easy first, hard last (gradual ramp)
-  pool.sort((a, b) => qDiff(a) - qDiff(b));
+  selected.sort((a, b) => qDiff(a) - qDiff(b));
 
-  sess = { questions: pool, idx: 0, score: 0, lives: 3, streak: 0, startTime: Date.now(), results: [], wrongModules: {}, wrongQs: [] };
+  sess = { questions: selected, idx: 0, score: 0, streak: 0, startTime: Date.now(), results: [], wrongModules: {}, wrongQs: [] };
   showScreen('session');
   startTimer();
   randomizeMascotColors();
@@ -1049,7 +1162,6 @@ function renderQuestion() {
   // Progress
   document.getElementById('sess-prog-fill').style.width = `${(sess.idx / total) * 100}%`;
   document.getElementById('sess-counter').textContent = `Întrebarea ${sess.idx + 1} din ${total}`;
-  document.getElementById('sess-lives').textContent = '💙'.repeat(sess.lives) + '🤍'.repeat(3 - sess.lives);
   document.getElementById('sess-streak').textContent = sess.streak > 1 ? `🔥 ${sess.streak}` : '';
 
   const area = document.getElementById('question-area');
@@ -1327,18 +1439,21 @@ function processAnswer(correct, q, given) {
   sess.results.push({ q, correct, given });
   const mp = S.modProgress[q.moduleId] || { correct: 0, total: 0 };
   mp.total++;
+  // Mark question as seen
+  if (!S.seenQs) S.seenQs = {};
+  if (!S.seenQs[q.moduleId]) S.seenQs[q.moduleId] = [];
+  if (q._exIdx !== undefined && !S.seenQs[q.moduleId].includes(q._exIdx)) {
+    S.seenQs[q.moduleId].push(q._exIdx);
+  }
   if (correct) {
     mp.correct++;
     sess.score++;
     sess.streak++;
-    const bonus = Math.min(sess.streak - 1, 5) * 10;
-    S.xp += 100 + bonus;
-    showFeedback(true, trExp(q.e), sess.streak > 2 ? `🔥 ${sess.streak} streak! +${100+bonus} XP` : `+${100+bonus} XP`, q.page);
+    showFeedback(true, trExp(q.e), sess.streak > 2 ? `🔥 ${sess.streak} streak!` : '', q.page);
     celebrate();
     playSound('correct');
     setMascotState('happy', sess.streak > 2 ? '🔥 Streak!' : '✓ Bravo!');
   } else {
-    sess.lives--;
     sess.streak = 0;
     sess.wrongModules[q.moduleId] = (sess.wrongModules[q.moduleId] || 0) + 1;
     // Track mistake persistently
@@ -1357,10 +1472,6 @@ function processAnswer(correct, q, given) {
   S.modProgress[q.moduleId] = mp;
   saveS();
   updateHomeStats();
-  if (sess.lives <= 0) {
-    document.getElementById('fb-continue').textContent = 'Sfârșitul sesiunii';
-    document.getElementById('fb-continue').onclick = endSession;
-  }
 }
 
 let autoAdvanceTimer = null;
@@ -1411,7 +1522,6 @@ function hideFeedback() {
 function continueSession() {
   if (autoAdvanceTimer) { clearTimeout(autoAdvanceTimer); autoAdvanceTimer = null; }
   if (!sess) return;
-  if (sess.lives <= 0) { endSession(); return; }
   sess.idx++;
   if (sess.idx >= sess.questions.length) { endSession(); return; }
   renderQuestion();
@@ -1431,12 +1541,10 @@ function endSession() {
   const total = sess.results.length;
   const correct = sess.score;
   const pct = total > 0 ? Math.round((correct / total) * 100) : 0;
-  const xpEarned = correct * 100;
   const wrongQs = sess.wrongQs || [];
 
   document.getElementById('res-correct').textContent = correct;
   document.getElementById('res-total').textContent = total;
-  document.getElementById('res-xp').textContent = `+${xpEarned}`;
   document.getElementById('res-time').textContent = `${m}:${s.toString().padStart(2,'0')}`;
   document.getElementById('res-pct').textContent = `${pct}%`;
 
@@ -1544,7 +1652,7 @@ function startBoosterSession() {
     saveS();
   }
 
-  sess = { questions: pool, idx: 0, score: 0, lives: 5, streak: 0, startTime: Date.now(), results: [], wrongModules: {}, wrongQs: [] };
+  sess = { questions: pool, idx: 0, score: 0, streak: 0, startTime: Date.now(), results: [], wrongModules: {}, wrongQs: [] };
   showScreen('session');
   startTimer();
   randomizeMascotColors();
@@ -1575,7 +1683,6 @@ function renderHome() {
 }
 
 function updateHomeStats() {
-  document.getElementById('home-xp').textContent = S.xp.toLocaleString();
   document.getElementById('home-streak').textContent = `🔥 ${S.streak}`;
 }
 
