@@ -397,7 +397,7 @@ body{background:var(--bg);color:var(--text);font-family:'DM Sans',sans-serif;min
     <div class="home-main">
       <div class="home-hero">
         <h1>Caietul Tău de Română</h1>
-        <p>244 întrebări · 15 pagini · 11 module</p>
+        <p>270 întrebări · 12 module</p>
       </div>
       <button class="session-start" onclick="startSession()">▶ Start</button>
       <p class="session-hint">20 de întrebări noi din toate modulele · fără repetiții</p>
@@ -839,6 +839,47 @@ const MODULES = [
     { type:'mc', q:'"Legume" vs "Fructe" — "morcov" este:', opts:['Legumă (vegetable)','Fruct (fruit)','Ambele','Nici una'], a:'Legumă (vegetable)', e:'"Morcov" = carrot = legumă. "Legume" = vegetables. "Fructe" = fruits.', page:0 },
     { type:'fill', q:'"Mi-e ___, vreau să mănânc!" (hungry)', a:'foame', alt:['Foame'], e:'"Mi-e foame" = I\'m hungry. "Foame" = hunger. "A fi flămând" = to be hungry.', page:0 },
   ]
+},
+{
+  id: 'articles', name: 'Articolul', sub: 'Articolul hotărât & nehotărât',
+  icon: '📐', page: 0, color: '#7c5ce0',
+  exercises: [
+    // Definite article (articulul hotărât) — masculine
+    { type:'mc', q:'"Student" cu articol hotărât devine:', opts:['Studentul','Studenta','Studentul-','Un student'], a:'Studentul', e:'Masculin sg. + "-ul": student→studentul, profesor→profesorul. Articolul e sufix!', page:0 },
+    { type:'fill', q:'"Câine" cu articol hotărât: "___"', a:'Câinele', alt:['cainele','câinele','Cainele'], e:'"Câine" → "câinele" (the dog). Masc. care termină în "-e" primesc "-le".', page:0 },
+    { type:'mc', q:'Care formă cu articol hotărât este CORECTĂ?', opts:['Copilul','Copilele','Copilua','Copilei'], a:'Copilul', e:'"Copil" [M] → "copilul" (the child). Masculin sg. primește "-ul".', page:0 },
+    { type:'fill', q:'"Profesor" + articol hotărât = "___"', a:'Profesorul', alt:['profesorul'], e:'"Profesor" → "profesorul" (the professor). Consoană finală + "-ul".', page:0 },
+    { type:'mc', q:'"Frate" cu articol hotărât devine:', opts:['Fratele','Fratul','Frateel','Fratulei'], a:'Fratele', e:'"Frate" → "fratele" (the brother). Masc. în "-e" → "-le" (nu "-ul").', page:0 },
+    // Definite article — feminine
+    { type:'fill', q:'"Casă" cu articol hotărât: "___"', a:'Casa', alt:['casa'], e:'"Casă" → "casa" (the house). Feminin "-ă" → "-a": masă→masa, fată→fata.', page:0 },
+    { type:'mc', q:'"Carte" cu articol hotărât devine:', opts:['Cartea','Carta','Carteul','Cartele'], a:'Cartea', e:'"Carte" → "cartea" (the book). Feminin "-e" → "-a": floare→floarea.', page:0 },
+    { type:'fill', q:'"Floare" + articol hotărât = "___"', a:'Floarea', alt:['floarea'], e:'"Floare" → "floarea" (the flower). Feminin: "-e" → "-ea".', page:0 },
+    { type:'mc', q:'"Ușă" cu articol hotărât:', opts:['Ușa','Ușăa','Ușeul','Ușele'], a:'Ușa', e:'"Ușă" → "ușa" (the door). Feminin "-ă" → "-a": ușă→ușa.', page:0 },
+    // Definite article — neuter
+    { type:'fill', q:'"Caiet" cu articol hotărât: "___"', a:'Caietul', alt:['caietul'], e:'"Caiet" [N] → "caietul" (the notebook). La singular, neutrul = masculin → "-ul".', page:0 },
+    { type:'mc', q:'"Scaun" cu articol hotărât devine:', opts:['Scaunul','Scauna','Scaunele','Scaunea'], a:'Scaunul', e:'"Scaun" [N] → "scaunul". Neutru sg. se comportă ca masculin → "-ul".', page:0 },
+    // Indefinite article (articulul nehotărât)
+    { type:'mc', q:'Articolul nehotărât pentru masculin/neutru singular:', opts:['un','o','una','unui'], a:'un', e:'"Un" = a/an (masc./neutru). "Un student", "un caiet". "O" = feminin.', page:0 },
+    { type:'fill', q:'"___ carte interesantă" (a book)', a:'O', alt:['o'], e:'"O" = a/an (feminin). "O carte" = a book. "O fată" = a girl.', page:0 },
+    { type:'mc', q:'Care este CORECT?', opts:['"Un om bun"','"O om bun"','"Una om bun"','"Unui om bun"'], a:'"Un om bun"', e:'"Om" = masculin → "un om". "Un" + masc./neutru sg.', page:0 },
+    { type:'fill', q:'"Am ___ idee!" (an idea)', a:'o', alt:['O'], e:'"O idee" = an idea. "Idee" [F] → articol nehotărât "o".', page:0 },
+    // Plural — indefinite forms
+    { type:'mc', q:'"Niște" este articolul nehotărât pentru:', opts:['Plural (toate genurile)','Singular masculin','Singular feminin','Doar neutru'], a:'Plural (toate genurile)', e:'"Niște" = some (pl.). "Niște cărți" = some books. "Niște studenți" = some students.', page:0 },
+    { type:'fill', q:'"Am cumpărat ___ mere." (some apples)', a:'niște', alt:['Niște','niste','Niste'], e:'"Niște" = some (articol nehotărât plural). "Niște mere" = some apples.', page:0 },
+    // Definite article with adjectives
+    { type:'mc', q:'"Băiatul deștept" — unde e articolul?', opts:['Pe substantiv: băiat→băiatul','Pe adjectiv: deștept→deșteptul','Nu există articol','Pe ambele'], a:'Pe substantiv: băiat→băiatul', e:'Articolul hotărât stă pe SUBSTANTIV, nu pe adjectiv. "Băiatul deștept" = the smart boy.', page:0 },
+    { type:'fill', q:'"Fata ___ lucrează aici." (the smart girl)', a:'deșteaptă', alt:['desteapta'], e:'"Fata deșteaptă" = the smart girl. Articolul e pe "fată"→"fata", nu pe adjectiv.', page:0 },
+    // Possessive article (al/a/ai/ale)
+    { type:'mc', q:'"Cartea a cui?" → "Cartea ___ Mariei"', opts:['—  (direct, fără articol)','al','a','ale'], a:'—  (direct, fără articol)', e:'"Cartea Mariei" = Maria\'s book. Nu e nevoie de "al/a" când substantivul are articol.', page:0 },
+    { type:'mc', q:'"Prietenul ___ fratelui meu" — care articol posesiv?', opts:['al','a','ai','ale'], a:'al', e:'"Al" + masc. sg.: "prietenul al fratelui" → dar se spune "prietenul fratelui" (direct).', page:0 },
+    // Common mistakes
+    { type:'mc', q:'Care este GREȘIT?', opts:['"Studentul un bun"','"Un student bun"','"Studentul bun"','"Studentul e bun"'], a:'"Studentul un bun"', e:'NU se combină articolul hotărât cu cel nehotărât! "Studentul bun" SAU "Un student bun".', page:0 },
+    { type:'fill', q:'"Am văzut ___ film bun ieri." (a good movie)', a:'un', alt:['Un'], e:'"Un film" = a movie. "Film" [N] → articol nehotărât "un".', page:0 },
+    // Context exercises
+    { type:'mc', q:'"Dă-mi cartea!" vs "Dă-mi o carte!" — diferența:', opts:['cartea = a specific book, o carte = any book','Sunt identice','cartea = informal','o carte = formal'], a:'cartea = a specific book, o carte = any book', e:'Articol hotărât = specific/cunoscut. Nehotărât = generic/necunoscut.', page:0 },
+    { type:'fill', q:'"___ este în bucătărie." (the cat)', a:'Pisica', alt:['pisica'], e:'"Pisică" → "pisica" (the cat). Feminin "-ă" → "-a". Specific = articol hotărât.', page:0 },
+    { type:'mc', q:'"Laptele" este forma cu articol a lui:', opts:['Lapte (neutru)','Laptă (feminin)','Lapt (masculin)','Lapteu (neutru)'], a:'Lapte (neutru)', e:'"Lapte" [N] → "laptele" (the milk). Neutru "-e" → "-ele": nume→numele.', page:0 },
+  ]
 }
 ];
 /* CAIET_DATA_END */
@@ -946,6 +987,15 @@ const EN_RU = {
   'Tomorrow':'Завтра','Yesterday morning':'Вчера утром',
   'Legumă (vegetable)':'Овощ','Fruct (fruit)':'Фрукт',
   'Paste (the meal)':'Паста (еда)',
+  // articles module
+  'Plural (toate genurile)':'Множественное (все роды)',
+  'Singular masculin':'Единственное мужской',
+  'Singular feminin':'Единственное женский',
+  'cartea = a specific book, o carte = any book':'cartea = конкретная книга, o carte = любая книга',
+  'Lapte (neutru)':'Молоко (средний род)',
+  'Laptă (feminin)':'Laptă (женский род)',
+  'Lapt (masculin)':'Lapt (мужской род)',
+  'Lapteu (neutru)':'Lapteu (средний род)',
 };
 
 // Word/phrase-level replacements for explanation text (sorted longest-first)
